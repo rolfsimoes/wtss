@@ -1,2 +1,2 @@
-# wtss.R
-Web Time Series Service for R
+# R Client API for Web Time Series Service
+
