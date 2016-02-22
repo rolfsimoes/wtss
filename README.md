@@ -33,7 +33,7 @@ A JavaScript client can be found at <a href="http://github.com/gqueiroz/wtss/">h
 - Create a connection <code>obj = wtssClient("http://www.dpi.inpe.br/mds/mds")</code>
 
 - Get the list of products provided by the service <code>objlist = listCoverages(obj)</code>
-- 
+
 - Get the description of an specific product <code>objdesc = describeCoverages(obj,"MOD09Q1")</code>
 
 - Get a time series <code>ts1 = getTimeSeries(obj, coverages="MOD09Q1", datasets=c("nir","quality","red","evi2"), latitude=-12, longitude=-45, from="2004-01-01", to="2004-05-01")</code>
