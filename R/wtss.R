@@ -278,10 +278,10 @@ setMethod("getListOfTimeSeries","wtss",
       out <- lapply(names(coverages), function(cov){
         #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
         attributes <- coverages[[cov]]
-        #request <- paste(url,"query?product=",cov,"&datasets=",paste(datasets, collapse=","),
+        #request <- paste(url,"time_series?coverage=",cov,"&attributes=",paste(attributes, collapse=","),
         #                 "&latitude=",latitude,"&longitude=",longitude,
         #                 "&start=",start,"&end=",end,"&output_format=json",sep="")
-        request <- paste(url,"time_series?coverage=",cov,"&attributes=",paste(attributes, collapse=","),
+        request <- paste(url,"query?product=",cov,"&datasets=",paste(datasets, collapse=","),
                          "&latitude=",latitude,"&longitude=",longitude,
                          "&start=",start,"&end=",end,"&output_format=json",sep="")
         while(class(items) == "try-error" & ce < 10) {
