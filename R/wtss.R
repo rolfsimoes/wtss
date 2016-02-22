@@ -267,7 +267,7 @@ setMethod("getListOfTimeSeries","wtss",
   class(items) <- "try-error"
   ce <- 0
   
-  url <- object
+   url <- object
     
   if(class(object)=="wtss")
     url <- getServerUrl(object)
