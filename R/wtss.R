@@ -1,4 +1,4 @@
-#' The WTSSCLIENT class
+#' The wtss class
 #'
 #' Use this class for representing a client of a WTSS
 #'
