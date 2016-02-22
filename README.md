@@ -2,7 +2,7 @@
 
 WTSS is a lightweight web service for handling remote sensing imagery as time series. Through a simple and effective representation for time series, this web service can be easily integrated into free and open source tools such as R, Python and web browser (through JavaScript).
 
-A JavaScript client can be found at <a href="http://github.com/gqueiroz/wtss/">http://github.com/gqueiroz/wtss<a>
+A JavaScript client can be found at <a href="http://www.dpi.inpe.br/mds/mds/">http://www.dpi.inpe.br/mds/mds<a>
 
 ## Building and Installing the Dependencies
 
