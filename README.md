@@ -48,7 +48,7 @@ The R API can be found at <a href="http://www.dpi.inpe.br/mds/mds/">http://www.d
 
 ## Reporting Bugs
 
-Any problem should be reported to esensing-team@dpi.inpe.br.
+Any problem should be reported to esensing-developers@dpi.inpe.br.
 
 
 For more information on wtss.R, please, visit its main web page at: http://www.dpi.inpe.br/esensing.
