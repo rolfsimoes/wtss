@@ -373,7 +373,7 @@ setMethod("getListOfTimeSeries","wtss",
   res = tryCatch({
     fromJSON(atext)
   }, error = function(e) {
-    stop(paste("ERROR: An error occurred while parsing JSON", e, sep = " - "))p
+    stop(paste("ERROR: An error occurred while parsing JSON", e, sep = " - "))
   }, finally = {
     print(paste("INPUT TEXT:", atext, sep = " "))
   })
