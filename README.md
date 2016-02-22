@@ -19,8 +19,11 @@ A JavaScript client can be found at <a href="http://github.com/gqueiroz/wtss/">h
 ### To use the package:
 
 - Open RStudio
+- 
 - Install devtools <code>install.packages("devtools")</code>
+- 
 - Load devtools <code>library(devtools)</code>
+- 
 - Install the rwtss package <code>install_github("e-sensing/wtss.R")</code>
 
 ### Usage examples:
