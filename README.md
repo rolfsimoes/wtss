@@ -6,7 +6,7 @@ The R API can be found at <a href="http://www.dpi.inpe.br/mds/mds/">http://www.d
 
 ## Building and Installing the Dependencies
 
-### Dependencies:
+### Prerequisites:
 
 - <a href="http://git-scm.com/">Git</a>.
 
@@ -26,7 +26,7 @@ The R API can be found at <a href="http://www.dpi.inpe.br/mds/mds/">http://www.d
 
 - You can also create a source package: Go to the <i>Build</i> tab, display the menu <i>More</i> and select the option <i>Build Source Package</i>.
 
-### Load the rwtss package and run a test:
+### Install dependencies, load the rwtss package and run a test:
 
 - Open RStudio
 
