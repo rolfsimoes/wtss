@@ -332,7 +332,8 @@ setMethod("getListOfTimeSeries","wtss",
 
 .timeSeriesProcessing <- function(items)
 {
-  attributes.processed <- lapply(items$result$attributes, function(subdataset)
+  #attributes.processed <- lapply(items$result$attributes, function(subdataset)
+  attributes.processed <- lapply(items$result$datasets, function(subdataset)
   {
     
     value <- subdataset$values
