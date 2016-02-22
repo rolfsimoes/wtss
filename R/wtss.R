@@ -184,8 +184,8 @@ setMethod("describeCoverages","wtss",
         stop("\n Server connection timeout. Verify the URL or try again later.")
         return(items)
       }
-      #return(items$datasets)
-      return(items$attributes)
+      #return(items$attributes)
+      return(items$datasets)
     })
     names(out) <- coverages
     return(out)
