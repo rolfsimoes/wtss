@@ -1,4 +1,4 @@
-#' The WTSSCLIENT class
+#' The wtss class
 #'
 #' Use this class for representing a client of a WTSS
 #'
@@ -9,9 +9,9 @@
 #' }
 #'
 #' @note No notes
-#' @name WtssClient
-#' @aliases WtssClient-class
-#' @exportClass WtssClient
+#' @name wtss
+#' @aliases wtss-class
+#' @exportClass wtss
 #' @author Victor Maus, Alber Sanchez
 #' @import rjson
 #' @import RCurl
@@ -19,16 +19,16 @@
 #' @import roxygen2
 #' @import testthat
 setClass (
-  Class = "WtssClient",
+  Class = "wtss",
   representation = representation(
     serverUrl = "character"
   ),
   validity = function(object){
     if(length(object@serverUrl) != 1){
-      stop ("[WtssClient: validation] Invalid server URL.")
+      stop ("[wtss: validation] Invalid server URL.")
     }else{}
     if(nchar(object@serverUrl) <= 1){
-      stop ("[WtssClient: validation] Invalid server URL.")
+      stop ("[wtss: validation] Invalid server URL.")
     }else{}
     return(TRUE)
   }
@@ -41,7 +41,7 @@ setClass (
 #*******************************************************
 setMethod (
   f="initialize",
-  signature="WtssClient",
+  signature="wtss",
   definition=function(.Object,serverUrl){
     if(!missing(serverUrl)){
       .Object@serverUrl <- serverUrl
@@ -53,16 +53,16 @@ setMethod (
   }
 )
 #CONSTRUCTOR (USER FRIENDLY)
-#' Creates a WtssClient object
+#' Creates a wtss object
 #'
 #' @param serverUrl A server URL
-#' @rdname WtssClient
+#' @rdname wtss
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
-wtssClient <- function(serverUrl){
-  new (Class="WtssClient",serverUrl = serverUrl)
+#' #obj = wtss("http://www.dpi.inpe.br/mds/mds")
+wtss <- function(serverUrl){
+  new (Class="wtss",serverUrl = serverUrl)
 }
 
 
@@ -74,14 +74,14 @@ wtssClient <- function(serverUrl){
 
 #' Returns the object's server URL
 #'
-#' @param object A WtssClient object
+#' @param object A wtss object
 #' @docType methods
 #' @aliases getServerUrl-generic
 #' @export
 setGeneric("getServerUrl",function(object){standardGeneric ("getServerUrl")})
 
 #' @rdname getServerUrl
-setMethod("getServerUrl","WtssClient",
+setMethod("getServerUrl","wtss",
           function(object){
             if(substr(object@serverUrl,nchar(object@serverUrl),nchar(object@serverUrl))!="/")
               return(paste(object@serverUrl,"/",sep=""))
@@ -91,14 +91,14 @@ setMethod("getServerUrl","WtssClient",
 
 #' Sets the object's server URL
 #'
-#' @param object A WtssClient object
+#' @param object A wtss object
 #' @param aServerUrl A character representing the server URL
 #' @docType methods
 #' @export
 setGeneric("setServerUrl",function(object, aServerUrl){standardGeneric ("setServerUrl")})
 
 #' @rdname  setServerUrl
-setMethod("setServerUrl","WtssClient",
+setMethod("setServerUrl","wtss",
           function(object, aServerUrl){
             object@serverUrl <- aServerUrl
           }
@@ -107,7 +107,7 @@ setMethod("setServerUrl","WtssClient",
 
 #' List coverages 
 #'
-#' @param object A WtssClient object
+#' @param object A wtss object
 #' @docType methods
 #' @export
 #' @examples
@@ -116,7 +116,7 @@ setMethod("setServerUrl","WtssClient",
 setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
 
 #' @rdname  listCoverages
-setMethod("listCoverages","WtssClient",
+setMethod("listCoverages","wtss",
           function(object){
             .listCoverages(object) 
           }
@@ -148,7 +148,7 @@ setMethod("listCoverages","WtssClient",
 
 #' Describe coverage
 #'
-#' @param object A WtssClient object
+#' @param object A wtss object
 #' @param coverages A character vector of coverage names
 #' @docType methods
 #' @export
@@ -159,7 +159,7 @@ setGeneric("describeCoverages",function(object,coverages){standardGeneric("descr
 
 
 #' @rdname  describeCoverages
-setMethod("describeCoverages","WtssClient",
+setMethod("describeCoverages","wtss",
           function(object,coverages){
             .describeCoverages(object,coverages) 
           }
@@ -184,6 +184,7 @@ setMethod("describeCoverages","WtssClient",
         stop("\n Server connection timeout. Verify the URL or try again later.")
         return(items)
       }
+      #return(items$attributes)
       return(items$datasets)
     })
     names(out) <- coverages
@@ -196,15 +197,15 @@ setMethod("describeCoverages","WtssClient",
 
 #' Get time series
 #'
-#' @description This function retrieves the time series for a pair of coordinates.
+#' @description This function retrieves the time series for a pair of coordinates.es
 #' 
-#' @param object Either a WtssClient object or a server URL
-#' @param coverages Either a list of coverages and datasets such as retrieved by describeCoverages() or a character with the coverage name.
-#' @param datasets A character vector of dataset names.
+#' @param object Either a wtss object or a server URL
+#' @param coverages Either a list of coverages and attributes such as retrieved by describeCoverages() or a character with the coverage name.
+#' @param attributes A character vector of dataset names.
 #' @param longitude A longitude in WGS84 coordinate system.
 #' @param latitude A latitude in WGS84 coordinate system.
-#' @param from A character with the start date in the format yyyy-mm-dd.
-#' @param to A character with the end date in the format yyyy-mm-dd.
+#' @param start A character with the start date in the format yyyy-mm-dd.
+#' @param end A character with the end date in the format yyyy-mm-dd.
 #' @docType methods
 #' @export
 #' @examples
@@ -212,12 +213,12 @@ setMethod("describeCoverages","WtssClient",
 #' #objlist = listCoverages(obj)
 #' #objdesc = describeCoverages(obj,objlist)
 #' #tsAll = getTimeSeries(obj, coverages=objdesc, longitude=-45, latitude=-12, from="2004-01-01", to="2004-05-01")
-setGeneric("getTimeSeries",function(object,coverages,datasets,longitude,latitude,from,to){standardGeneric("getTimeSeries")})
+setGeneric("getTimeSeries",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("getTimeSeries")})
 
 #' @rdname  getTimeSeries
-setMethod("getTimeSeries","WtssClient",
-          function(object,coverages,datasets,longitude,latitude,from,to){
-            .getTimeSeries(object,coverages,datasets,longitude,latitude,from,to)
+setMethod("getTimeSeries","wtss",
+          function(object,coverages,attributes,longitude,latitude,start,end){
+            .getTimeSeries(object,coverages,attributes,longitude,latitude,start,end)
           }
 )
 
@@ -225,12 +226,12 @@ setMethod("getTimeSeries","WtssClient",
 #'
 #' @description This function retrieves the time series for a list of coordinates.
 #'
-#' @param object Either a WtssClient object or a server URL
-#' @param coverages Either a list of coverages and datasets such as retrieved by describeCoverages() or a character with the coverage name.
-#' @param datasets A character vector of dataset names.
+#' @param object Either a wtss object or a server URL
+#' @param coverages Either a list of coverages and attributes such as retrieved by describeCoverages() or a character with the coverage name.
+#' @param attributes A character vector of dataset names.
 #' @param coordinates A list or data frame of longitude latitude coordinates in WGS84 coordinate system.
-#' @param from A character with the start date in the format yyyy-mm-dd.
-#' @param to A character with the end date in the format yyyy-mm-dd.
+#' @param start A character with the start date in the format yyyy-mm-dd.
+#' @param end A character with the end date in the format yyyy-mm-dd.
 #' @docType methods
 #' @export
 #' @examples
@@ -239,11 +240,11 @@ setMethod("getTimeSeries","WtssClient",
 #' #objdesc = describeCoverages(obj,objlist)
 #' #coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))
 #' #tsAll = getListOfTimeSeries(obj, coverages=objdesc, coordinates=coordinates, from="2004-01-01", to="2004-05-01")
-setGeneric("getListOfTimeSeries",function(object,coverages,datasets,coordinates,from,to){standardGeneric("getListOfTimeSeries")})
+setGeneric("getListOfTimeSeries",function(object,coverages,attributes,coordinates,start,end){standardGeneric("getListOfTimeSeries")})
 
 #' @rdname  getListOfTimeSeries
-setMethod("getListOfTimeSeries","WtssClient",
-          function(object,coverages,datasets,coordinates,from,to){
+setMethod("getListOfTimeSeries","wtss",
+          function(object,coverages,attributes,coordinates,start,end){
             if( is.data.frame(coordinates) | is.matrix(coordinates))
               coordinates <- lapply(1:dim(coordinates)[1], function(i) coordinates[i,])
             if(!is.list(coordinates))
@@ -251,24 +252,24 @@ setMethod("getListOfTimeSeries","WtssClient",
             out <- lapply(coordinates, function(coords){
               longitude <- coords[1]
               latitude <- coords[2]
-              items <- .getTimeSeries(object,coverages,datasets,longitude,latitude,from,to)
+              items <- .getTimeSeries(object,coverages,attributes,longitude,latitude,start,end)
             })
             return(out)
           }
 )
 
-.getTimeSeries <- function(object,coverages,datasets,longitude,latitude,from,to)
+.getTimeSeries <- function(object,coverages,attributes,longitude,latitude,start,end)
 {
   if(missing(object))
-    stop("Missing either a WtssClient object or a server URL.")
+    stop("Missing either a wtss object or a server URL.")
   
   items <- 0
   class(items) <- "try-error"
   ce <- 0
   
-  url <- object
+   url <- object
     
-  if(class(object)=="WtssClient")
+  if(class(object)=="wtss")
     url <- getServerUrl(object)
   
   if( length(url) == 1 && nchar(url) > 1 ){
@@ -276,10 +277,13 @@ setMethod("getListOfTimeSeries","WtssClient",
     if(is.list(coverages)){
       out <- lapply(names(coverages), function(cov){
         #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
-        datasets <- coverages[[cov]]
+        attributes <- coverages[[cov]]
+        #request <- paste(url,"time_series?coverage=",cov,"&attributes=",paste(attributes, collapse=","),
+        #                 "&latitude=",latitude,"&longitude=",longitude,
+        #                 "&start=",start,"&end=",end,"&output_format=json",sep="")
         request <- paste(url,"query?product=",cov,"&datasets=",paste(datasets, collapse=","),
                          "&latitude=",latitude,"&longitude=",longitude,
-                         "&start=",from,"&end=",to,"&output_format=json",sep="")
+                         "&start=",start,"&end=",end,"&output_format=json",sep="")
         while(class(items) == "try-error" & ce < 10) {
           items <- .parseJSON(.sendrequest(request))#items <- try(fromJSON(try(getURL(request))))
           ce <- ce + 1
@@ -293,11 +297,17 @@ setMethod("getListOfTimeSeries","WtssClient",
       })
       names(out) <- names(coverages)
       return(out)
-    } else if( is.character(coverages) && length(coverages)==1 && is.character(datasets)) {
+    } else if( is.character(coverages) && length(coverages)==1 && is.character(attributes)) {
         #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
-        request <- paste(url,"query?product=",coverages,"&datasets=",paste(datasets, collapse=","),
+        #request <- paste(url,"query?product=",coverages,"&datasets=",paste(datasets, collapse=","),
+        #                 "&latitude=",latitude,"&longitude=",longitude,
+        #                 "&start=",from,"&end=",to,"&output_format=json",sep="")
+        #request <- paste(url,"time_series?coverage=",coverages,"&attributes=",paste(attributes, collapse=","),
+        #               #                 "&latitude=",latitude,"&longitude=",longitude,
+        #               #                 "&start=",start,"&end=",end,"&output_format=json",sep="")
+        request <- paste(url,"query?product=",coverages,"&datasets=",paste(attributes, collapse=","),
                          "&latitude=",latitude,"&longitude=",longitude,
-                         "&start=",from,"&end=",to,"&output_format=json",sep="")
+                         "&start=",start,"&end=",end,"&output_format=json",sep="")
         while(class(items) == "try-error" & ce < 10) {
           items <- .parseJSON(.sendrequest(request))#items <- try(fromJSON(try(getURL(request))))
           ce <- ce + 1
@@ -311,7 +321,7 @@ setMethod("getListOfTimeSeries","WtssClient",
         names(out) <- coverages
         return(out)
     } else {
-      stop("Missing either a list of coverages and datasets such as retrieved by describeCoverages()
+      stop("Missing either a list of coverages and attributes such as retrieved by describeCoverages()
            or a character with the coverage name and a character vector of dataset names.")
     }
   }
@@ -322,7 +332,8 @@ setMethod("getListOfTimeSeries","WtssClient",
 
 .timeSeriesProcessing <- function(items)
 {
-  datasets.processed <- lapply(items$result$datasets, function(subdataset)
+  #attributes.processed <- lapply(items$result$attributes, function(subdataset)
+  attributes.processed <- lapply(items$result$datasets, function(subdataset)
   {
     
     value <- subdataset$values
@@ -340,10 +351,10 @@ setMethod("getListOfTimeSeries","WtssClient",
     
   })
   
-  datasets.processed <- data.frame(datasets.processed, stringsAsFactors = FALSE)
+  attributes.processed <- data.frame(attributes.processed, stringsAsFactors = FALSE)
   
   return( list(center_coordinate = data.frame(longitude=items$result$center_coordinate$longitude, latitude=items$result$center_coordinate$latitude), 
-               datasets = data.frame( timeline=as.Date(items$result$timeline), datasets.processed, stringsAsFactors = FALSE)) 
+               attributes = data.frame( timeline=as.Date(items$result$timeline), attributes.processed, stringsAsFactors = FALSE)) 
   )
 }
 
