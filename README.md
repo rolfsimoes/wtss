@@ -2,7 +2,9 @@
 
 WTSS is a lightweight web service for handling remote sensing imagery as time series. Through a simple and effective representation for time series, this web service can be easily integrated into free and open source tools such as R, Python and web browser.
 
-The R API can be found at <a href="http://www.dpi.inpe.br/mds/mds/">http://www.dpi.inpe.br/mds/mds<a>
+The R API can be found at <a href="http://www.dpi.inpe.br/mds/mds/">http://www.dpi.inpe.br/mds/mds<a>.
+
+This R API is an update version of the service provided by <a href="https://github.com/albhasan/rwtss">https://github.com/albhasan/rwtss<a>.
 
 ## Building and Installing the Dependencies
 
