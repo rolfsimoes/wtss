@@ -2,7 +2,7 @@
 
 **wtss.R** is a free and open source R client package for handling Web Time-Series Service (WTSS) in the client side. For more information on WTSS see  [its specification and documentation in the TWS site](https://github.com/e-sensing/tws). 
 
-This R API is based on the orginal version developed by Alber Sanchez at https://github.com/albhasan/rwtss.
+This R Client API is based on the orginal version developed by Alber Sanchez at https://github.com/albhasan/rwtss.
 
 ## Prerequisites
 
