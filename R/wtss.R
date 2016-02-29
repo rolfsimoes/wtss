@@ -9,7 +9,7 @@
 #' }
 #'
 #' @note No notes
-#' @name wtss.R
+#' @name wtss
 #' @aliases wtss-class
 #' @exportClass wtss
 #' @author Victor Maus, Alber Sanchez, Luiz Fernando Assis, Gilberto Ribeiro
