@@ -9,10 +9,10 @@
 #' }
 #'
 #' @note No notes
-#' @name wtss
+#' @name wtss.R
 #' @aliases wtss-class
 #' @exportClass wtss
-#' @author Victor Maus, Alber Sanchez
+#' @author Victor Maus, Alber Sanchez, Luiz Fernando Assis, Gilberto Ribeiro
 #' @import rjson
 #' @import RCurl
 #' @import methods
