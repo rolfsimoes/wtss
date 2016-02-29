@@ -20,9 +20,9 @@ This R API is based on the orginal version developed by Alber Sanchez at https:/
  
 - Load devtools <code>library(devtools)</code>
  
-- Install the rwtss package <code>install_github("e-sensing/wtss.R")</code>
+- Install the wtss.R package <code>install_github("e-sensing/wtss.R")</code>
 
-- Load the rwtss package <code>library(wtss.R)</code>
+- Load the wtss.R package <code>library(wtss.R)</code>
 
 - Create a connection <code>chronos = wtss("http://www.dpi.inpe.br/mds/mds")</code>
 
@@ -30,7 +30,7 @@ This R API is based on the orginal version developed by Alber Sanchez at https:/
 
 - Get the description of an specific product <code>cv = describe_coverages(obj,coverages[[1]])</code>
 
-- Get a time series <code>ts = time_series(chronos, coverages=names(coverages[[1]]), attributes=c("nir","quality","red","evi2"), latitude=-12, longitude=-45, start="2004-01-01", end="2004-05-01")</code>
+- Get a time series <code>ts = time_series(chronos, coverages=coverages[[1]], attributes=cv[[1]], latitude=-12, longitude=-45, start="2004-01-01", end="2004-05-01")</code>
  
 ## Building Instructions
 
