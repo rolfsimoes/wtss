@@ -19,6 +19,8 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 - Install devtools <code>install.packages("devtools")</code>
  
 - Load devtools <code>library(devtools)</code>
+
+<b>NOTE:</b> For older R versions it is also necessary to install the <i>digest</i> package.
  
 - Install the wtss.R package <code>install_github("e-sensing/wtss.R")</code>
 
