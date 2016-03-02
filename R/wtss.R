@@ -12,7 +12,7 @@
 #' @name wtss
 #' @aliases wtss-class
 #' @exportClass wtss
-#' @author Victor Maus, Alber Sanchez
+#' @author Victor Maus, Alber Sanchez, Luiz Fernando Assis, Gilberto Ribeiro
 #' @import rjson
 #' @import RCurl
 #' @import methods
@@ -113,16 +113,16 @@ setMethod("setServerUrl","wtss",
 #' @examples
 #' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 #' #objlist = listCoverages(obj)
-setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
+setGeneric("list_coverages",function(object){standardGeneric ("list_coverages")})
 
-#' @rdname  listCoverages
-setMethod("listCoverages","wtss",
+#' @rdname  list_coverages
+setMethod("list_coverages","wtss",
           function(object){
-            .listCoverages(object) 
+            .list_coverages(object) 
           }
 )
 
-.listCoverages <- function(object)
+.list_coverages <- function(object)
 {
   url <- getServerUrl(object)
   items <- 0
@@ -155,17 +155,17 @@ setMethod("listCoverages","wtss",
 #' @examples
 #' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 #' #objdesc = describeCoverages(obj,"MOD09Q1")
-setGeneric("describeCoverages",function(object,coverages){standardGeneric("describeCoverages")})
+setGeneric("describe_coverages",function(object,coverages){standardGeneric("describe_coverages")})
 
 
-#' @rdname  describeCoverages
-setMethod("describeCoverages","wtss",
+#' @rdname  describe_coverages
+setMethod("describe_coverages","wtss",
           function(object,coverages){
-            .describeCoverages(object,coverages) 
+            .describe_coverages(object,coverages) 
           }
 )
 
-.describeCoverages <- function(object,coverages)
+.describe_coverages <- function(object,coverages)
 {
   url <- getServerUrl(object)
   items <- 0
@@ -200,7 +200,7 @@ setMethod("describeCoverages","wtss",
 #' @description This function retrieves the time series for a pair of coordinates.es
 #' 
 #' @param object Either a wtss object or a server URL
-#' @param coverages Either a list of coverages and attributes such as retrieved by describeCoverages() or a character with the coverage name.
+#' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverages() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
 #' @param longitude A longitude in WGS84 coordinate system.
 #' @param latitude A latitude in WGS84 coordinate system.
@@ -213,12 +213,12 @@ setMethod("describeCoverages","wtss",
 #' #objlist = listCoverages(obj)
 #' #objdesc = describeCoverages(obj,objlist)
 #' #tsAll = getTimeSeries(obj, coverages=objdesc, longitude=-45, latitude=-12, from="2004-01-01", to="2004-05-01")
-setGeneric("getTimeSeries",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("getTimeSeries")})
+setGeneric("time_series",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("time_series")})
 
-#' @rdname  getTimeSeries
-setMethod("getTimeSeries","wtss",
+#' @rdname  time_series
+setMethod("time_series","wtss",
           function(object,coverages,attributes,longitude,latitude,start,end){
-            .getTimeSeries(object,coverages,attributes,longitude,latitude,start,end)
+            .time_series(object,coverages,attributes,longitude,latitude,start,end)
           }
 )
 
@@ -227,7 +227,7 @@ setMethod("getTimeSeries","wtss",
 #' @description This function retrieves the time series for a list of coordinates.
 #'
 #' @param object Either a wtss object or a server URL
-#' @param coverages Either a list of coverages and attributes such as retrieved by describeCoverages() or a character with the coverage name.
+#' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverages() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
 #' @param coordinates A list or data frame of longitude latitude coordinates in WGS84 coordinate system.
 #' @param start A character with the start date in the format yyyy-mm-dd.
@@ -252,13 +252,13 @@ setMethod("getListOfTimeSeries","wtss",
             out <- lapply(coordinates, function(coords){
               longitude <- coords[1]
               latitude <- coords[2]
-              items <- .getTimeSeries(object,coverages,attributes,longitude,latitude,start,end)
+              items <- .time_series(object,coverages,attributes,longitude,latitude,start,end)
             })
             return(out)
           }
 )
 
-.getTimeSeries <- function(object,coverages,attributes,longitude,latitude,start,end)
+.time_series <- function(object,coverages,attributes,longitude,latitude,start,end)
 {
   if(missing(object))
     stop("Missing either a wtss object or a server URL.")
@@ -321,7 +321,7 @@ setMethod("getListOfTimeSeries","wtss",
         names(out) <- coverages
         return(out)
     } else {
-      stop("Missing either a list of coverages and attributes such as retrieved by describeCoverages()
+      stop("Missing either a list of coverages and attributes such as retrieved by describe_coverages()
            or a character with the coverage name and a character vector of dataset names.")
     }
   }
