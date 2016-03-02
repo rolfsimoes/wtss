@@ -24,3 +24,5 @@ vignettes/
 .tex
 .gz
 
+#Mac OS X
+.DS_Store
