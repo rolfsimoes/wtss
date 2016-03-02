@@ -30,7 +30,7 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 
 - Get the list of products provided by the service <code>coverages = list_coverages(chronos)</code>
 
-- Get the description of an specific product <code>cv = describe_coverages(chronos,coverages[[1]])</code>
+- Get the description of an specific product <code>cv = describe_coverage(chronos,coverages[[1]])</code>
 
 - Get a time series <code>ts = time_series(chronos, coverages[[1]], attributes=cv[[1]], latitude=-12, longitude=-45, start="2004-01-01", end="2004-05-01")</code>
  
