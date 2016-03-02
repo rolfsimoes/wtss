@@ -155,17 +155,17 @@ setMethod("list_coverages","wtss",
 #' @examples
 #' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 #' #objdesc = describeCoverages(obj,"MOD09Q1")
-setGeneric("describe_coverages",function(object,coverages){standardGeneric("describe_coverages")})
+setGeneric("describe_coverage",function(object,coverages){standardGeneric("describe_coverage")})
 
 
-#' @rdname  describe_coverages
-setMethod("describe_coverages","wtss",
+#' @rdname  describe_coverage
+setMethod("describe_coverage","wtss",
           function(object,coverages){
-            .describe_coverages(object,coverages) 
+            .describe_coverage(object,coverages) 
           }
 )
 
-.describe_coverages <- function(object,coverages)
+.describe_coverage <- function(object,coverages)
 {
   url <- getServerUrl(object)
   items <- 0
@@ -200,7 +200,7 @@ setMethod("describe_coverages","wtss",
 #' @description This function retrieves the time series for a pair of coordinates.es
 #' 
 #' @param object Either a wtss object or a server URL
-#' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverages() or a character with the coverage name.
+#' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
 #' @param longitude A longitude in WGS84 coordinate system.
 #' @param latitude A latitude in WGS84 coordinate system.
@@ -227,7 +227,7 @@ setMethod("time_series","wtss",
 #' @description This function retrieves the time series for a list of coordinates.
 #'
 #' @param object Either a wtss object or a server URL
-#' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverages() or a character with the coverage name.
+#' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
 #' @param coordinates A list or data frame of longitude latitude coordinates in WGS84 coordinate system.
 #' @param start A character with the start date in the format yyyy-mm-dd.
@@ -321,7 +321,7 @@ setMethod("getListOfTimeSeries","wtss",
         names(out) <- coverages
         return(out)
     } else {
-      stop("Missing either a list of coverages and attributes such as retrieved by describe_coverages()
+      stop("Missing either a list of coverages and attributes such as retrieved by describe_coverage()
            or a character with the coverage name and a character vector of dataset names.")
     }
   }
