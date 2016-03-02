@@ -14,7 +14,7 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 
 ## Using the wtss.R Package
 
-<b>NOTE:</b> For older R versions it is also necessary to install the <i>digest</i> package.
+<b>NOTE:</b> For older R versions, it is also necessary to install the <i>digest</i> package.
 
 - Open RStudio
 
