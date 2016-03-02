@@ -1,13 +1,15 @@
-Package: rwtss
+Package: wtss.R
 Type: Package
 Title: R client for WTSS
-Version: 0.1.1
-Date: 2014-11-17
+Version: 0.1.2
+Date: 2016-02-16
 Authors@R: c(person("Victor", "Maus", role = c("aut"),email
     ="vwmaus1@gmail.com"), person("Alber", "Sanchez", role = c("aut",
-    "cre"),email ="albhasan@gmail.com"))
-Author: Alber Sanchez, Victor Maus
-Maintainer: Alber Sanchez <albhasan@gmail.com>
+    "cre"),email ="albhasan@gmail.com"), person("Luiz Fernando", "Assis", role = c("aut",
+    "cre"),email ="luizffga@dpi.inpe.br"), person("Gilberto", "Ribeiro", role = c("aut",
+    "cre"),email ="gribeiro@dpi.inpe.br"))
+Author: Alber Sanchez, Victor Maus, Luiz Fernando Assis, Gilberto Ribeiro
+Maintainer: Luiz Fernando Assis <luizffga@dpi.inpe.br>
 Description: R client for the Web Time Series Service (WTSS).
 Depends: R (>= 3.0.0)
 Imports:
@@ -16,4 +18,4 @@ Imports:
     RCurl,
     rjson,
     testthat
-License: MIT + file LICENSE
+License: LGPL + file LICENSE

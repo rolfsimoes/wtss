@@ -1,4 +1,4 @@
 library(testthat)
-library(rwtss)
+library(wtss.R)
 
-test_check("rwtss")
+test_check("wtss.R")

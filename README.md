@@ -2,7 +2,7 @@
 
 **wtss.R** is a free and open source R client package for handling Web Time-Series Service (WTSS) in the client side. For more information on WTSS see  [its specification and documentation in the TWS site](https://github.com/e-sensing/tws). 
 
-This R API is based on the orginal version developed by Alber Sanchez at https://github.com/albhasan/rwtss.
+This R Client API is based on the orginal version developed by Alber Sanchez at https://github.com/albhasan/rwtss.
 
 ## Prerequisites
 
@@ -20,23 +20,23 @@ This R API is based on the orginal version developed by Alber Sanchez at https:/
  
 - Load devtools <code>library(devtools)</code>
  
-- Install the rwtss package <code>install_github("e-sensing/wtss.R")</code>
+- Install the wtss.R package <code>install_github("e-sensing/wtss.R")</code>
 
-- Load the rwtss package <code>library(rwtss)</code>
+- Load the wtss.R package <code>library(wtss.R)</code>
 
-- Create a connection <code>obj = wtss("http://www.dpi.inpe.br/mds/mds")</code>
+- Create a connection <code>chronos = wtss("http://www.dpi.inpe.br/mds/mds")</code>
 
-- Get the list of products provided by the service <code>objlist = listCoverages(obj)</code>
+- Get the list of products provided by the service <code>coverages = list_coverages(chronos)</code>
 
-- Get the description of an specific product <code>objdesc = describeCoverages(obj,"MOD09Q1")</code>
+- Get the description of an specific product <code>cv = describe_coverages(chronos,coverages[[1]])</code>
 
-- Get a time series <code>ts1 = getTimeSeries(obj, coverages="MOD09Q1", datasets=c("nir","quality","red","evi2"), latitude=-12, longitude=-45, start="2004-01-01", end="2004-05-01")</code>
+- Get a time series <code>ts = time_series(chronos, coverages[[1]], attributes=cv[[1]], latitude=-12, longitude=-45, start="2004-01-01", end="2004-05-01")</code>
  
 ## Building Instructions
 
 - Clone the project: <code>git clone https//github.com/e-sensing/wtss.R.git</code>.
 
-- Open Rstudio, go to File - Open Project and pick the file <code>rwtss.Rproj</code>.
+- Open Rstudio, go to File - Open Project and pick the file <code>wtss.R.Rproj</code>.
 
 - Install the required packages <code>install.packages(c("roxygen2", "testthat"))</code>.
 
