@@ -11,11 +11,14 @@ Authors@R: c(person("Victor", "Maus", role = c("aut"),email
 Author: Alber Sanchez, Victor Maus, Luiz Fernando Assis, Gilberto Ribeiro
 Maintainer: Luiz Fernando Assis <luizffga@dpi.inpe.br>
 Description: R client for the Web Time Series Service (WTSS).
-Depends: R (>= 3.0.0)
+Depends:
+    R (>= 3.0.0)
 Imports:
     methods,
     roxygen2,
     RCurl,
     rjson,
-    testthat
+    testthat,
+    zoo
 License: LGPL + file LICENSE
+RoxygenNote: 5.0.1
