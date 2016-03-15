@@ -10,6 +10,8 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 
 - **<a href="http://www.r-project.org/">R</a>:** For building and using the wtss.R package.
 
+- **<a href="https://www.latex-project.org/">Latex</a>:** For including features for the production of vignettes.
+
 - **<a href="http://www.rstudio.com/">Rstudio</a>:** suggestion of IDE to be used as the development environment.
 
 ## Using the wtss.R Package
