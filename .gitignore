@@ -13,8 +13,6 @@
 
 # Man files
 man/
-.Rd
-.Rd~
 README.md~
 
 # Vignete files
