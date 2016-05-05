@@ -31,8 +31,8 @@ This function retrieves the time series for a pair of coordinates.es
 }
 \examples{
 #obj = wtss("http://www.dpi.inpe.br/mds/mds")
-#objlist = list_coverages(obj)
-#objdesc = describe_coverage(obj,objlist)
-#tsAll = time_series(obj, objdesc, -45, -12, "2004-01-01", "2004-05-01")
+#objlist = listCoverages(obj)
+#objdesc = describeCoverages(obj,objlist)
+#tsAll = getTimeSeries(obj, objdesc,-45,-12,"2004-01-01","2004-05-01")
 }
 

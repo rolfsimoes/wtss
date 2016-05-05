@@ -17,7 +17,7 @@ list_coverages(object)
 List coverages
 }
 \examples{
-#obj = wtss("http://www.dpi.inpe.br/mds/mds")
-#objlist = list_coverages(obj)
+#obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#objlist = listCoverages(obj)
 }
 

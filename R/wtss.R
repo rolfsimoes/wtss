@@ -154,10 +154,10 @@ setMethod("describe_coverage","wtss",
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' #obj = wtss("http://www.dpi.inpe.br/mds/mds")
 #' #objlist = listCoverages(obj)
 #' #objdesc = describeCoverages(obj,objlist)
-#' #tsAll = getTimeSeries(obj, coverages=objdesc, longitude=-45, latitude=-12, from="2004-01-01", to="2004-05-01")
+#' #tsAll = getTimeSeries(obj, objdesc,-45,-12,"2004-01-01","2004-05-01")
 setGeneric("time_series",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("time_series")})
 
 #' @rdname  time_series
@@ -184,7 +184,7 @@ setMethod("time_series","wtss",
 #' #objlist = listCoverages(obj)
 #' #objdesc = describeCoverages(obj,objlist)
 #' #coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))
-#' #tsAll = getListOfTimeSeries(obj, coverages=objdesc, coordinates=coordinates, from="2004-01-01", to="2004-05-01")
+#' #tsAll = getListOfTimeSeries(obj, objdesc, coordinates, from="2004-01-01", to="2004-05-01")
 setGeneric("getListOfTimeSeries",function(object,coverages,attributes,coordinates,start,end){standardGeneric("getListOfTimeSeries")})
 
 #' @rdname  getListOfTimeSeries
@@ -270,7 +270,7 @@ setMethod("getListOfTimeSeries","wtss",
     if(is.list(coverages)){
       out <- lapply(names(coverages), function(cov){
         attributes <- coverages[[cov]]
-        request <- paste(url,"query?product=",cov,"&datasets=",paste(datasets, collapse=","),
+        request <- paste(url,"query?product=",cov,"&datasets=",paste(attributes, collapse=","),
                          "&latitude=",latitude,"&longitude=",longitude,
                          "&start=",start,"&end=",end,"&output_format=json",sep="")
         while(class(items) == "try-error" & ce < 10) {
