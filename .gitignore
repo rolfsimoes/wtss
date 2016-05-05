@@ -12,8 +12,8 @@
 .Rproj.user
 
 # Man files
-man/
-README.md~
+#man/
+#README.md~
 
 # Vignete files
 vignettes/
