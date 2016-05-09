@@ -131,7 +131,8 @@ setMethod("listCoverages","wtss",
     #request <- paste(url,"list_coverages?output_format=json",sep="")
     request <- paste(url,"product_list?output_format=json",sep="")
     while(class(items) == "try-error" & ce < 10) {
-      items <- .parseJSON(.sendRequest(request))#items <- try(fromJSON(try(getURL(request))))
+      items <- .parseJSON(.sendRequest(request))
+      #items <- try(fromJSON(try(getURL(request))))
       ce <- ce + 1
     }
     if (class(items) == "try-error"){
@@ -338,20 +339,29 @@ setMethod("getListOfTimeSeries","wtss",
   )
 }
 
-.sendRequest <- function(request){
+.sendRequest <- function(request)
+{
   res = tryCatch({
     getURL(request)
   }, error = function(e) {
-    stop("ERROR: An error occurred while retrieving data.")
+    if(grep("Could not resolve host: ", e$message) == 1)
+      e$message <- toJSON("error: Request to the web time series service failed. The URL server may be incorrect or the service does not exist.")
+    stop(e$message)
   })
+  
   return(res)
 }
 
-.parseJSON <- function(atext){
+.parseJSON <- function(atext)
+{
   res = tryCatch({
     fromJSON(atext)
   }, error = function(e) {
-    stop(paste("ERROR: An error occurred while parsing JSON", e, sep = " - "))
+    if (length(e$message) > 1)
+      if(grep("Error in fromJSON(atext): unexpected character '<'", e$message) == 1)
+        e$message <- toJSON("error: Request to the web time series service failed. The web service may be temporaly down.")
+    stop(e$message)
   })
+  
   return(res)
 }
