@@ -23,6 +23,7 @@ No notes
 
 \describe{
 \item{\code{serverUrl}:}{Object of class \code{"character"}, URL of the server.}
+\item{\code{coverages}:}{List of coverages \code{"character"}.}
 }
 }
 \examples{

@@ -6,6 +6,7 @@
 #'@section Slots :
 #' \describe{
 #' \item{\code{serverUrl}:}{Object of class \code{"character"}, URL of the server.}
+#' \item{\code{coverages}:}{List of coverages \code{"character"}.}
 #' }
 #'
 #' @note No notes
@@ -22,7 +23,8 @@
 setClass (
   Class = "wtss",
   representation = representation(
-    serverUrl = "character"
+    serverUrl = "character",
+    coverages = "character"
   ),
   validity = function(object){
     if(length(object@serverUrl) != 1){
@@ -44,7 +46,9 @@ setMethod (
   definition=function(.Object,serverUrl){
     if(!missing(serverUrl)){
       .Object@serverUrl <- serverUrl
+      .Object@coverages <- .listCoverages(.Object)
       validObject(.Object)
+      
     }else{
       .Object@serverUrl <- character(0)
     }
@@ -63,8 +67,6 @@ setMethod (
 wtss <- function(serverUrl){
   new (Class="wtss",serverUrl = serverUrl)
 }
-
-
 
 #*******************************************************
 #ACCESSORS
