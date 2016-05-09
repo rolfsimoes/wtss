@@ -28,10 +28,10 @@ getListOfTimeSeries(object, coverages, attributes, coordinates, start, end)
 This function retrieves the time series for a list of coordinates.
 }
 \examples{
-#obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#obj = wtss("http://www.dpi.inpe.br/mds/mds")
 #objlist = listCoverages(obj)
 #objdesc = describeCoverages(obj,objlist)
 #coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))
-#tsAll = getListOfTimeSeries(obj, objdesc, coordinates, from="2004-01-01", to="2004-05-01")
+#tsAll = getListOfTimeSeries(obj, objdesc, coordinates, "2004-01-01", "2004-05-01")
 }
 
