@@ -6,6 +6,7 @@
 #'@section Slots :
 #' \describe{
 #' \item{\code{serverUrl}:}{Object of class \code{"character"}, URL of the server.}
+#' \item{\code{coverages}:}{List of coverages \code{"character"}.}
 #' }
 #'
 #' @note No notes
@@ -22,7 +23,8 @@
 setClass (
   Class = "wtss",
   representation = representation(
-    serverUrl = "character"
+    serverUrl = "character",
+    coverages = "character"
   ),
   validity = function(object){
     if(length(object@serverUrl) != 1){
@@ -35,8 +37,6 @@ setClass (
   }
 )
 
-
-
 #*******************************************************
 #CONSTRUCTOR
 #*******************************************************
@@ -46,7 +46,9 @@ setMethod (
   definition=function(.Object,serverUrl){
     if(!missing(serverUrl)){
       .Object@serverUrl <- serverUrl
+      .Object@coverages <- .listCoverages(.Object)
       validObject(.Object)
+      
     }else{
       .Object@serverUrl <- character(0)
     }
@@ -65,8 +67,6 @@ setMethod (
 wtss <- function(serverUrl){
   new (Class="wtss",serverUrl = serverUrl)
 }
-
-
 
 #*******************************************************
 #ACCESSORS
@@ -110,16 +110,38 @@ setMethod("setServerUrl","wtss",
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' #obj = wtss("http://www.dpi.inpe.br/mds/mds")
 #' #objlist = listCoverages(obj)
-setGeneric("list_coverages",function(object){standardGeneric ("list_coverages")})
+setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
 
-#' @rdname  list_coverages
-setMethod("list_coverages","wtss",
+#' @rdname  listCoverages
+setMethod("listCoverages","wtss",
           function(object){
-            .list_coverages(object) 
+            .listCoverages(object) 
           }
 )
+
+.listCoverages <- function(object)
+{
+  url <- getServerUrl(object)
+  items <- 0
+  class(items) <- "try-error"
+  ce <- 0
+  if( length(url) == 1 && nchar(url) > 1 ){
+    #request <- paste(url,"list_coverages?output_format=json",sep="")
+    request <- paste(url,"product_list?output_format=json",sep="")
+    while(class(items) == "try-error" & ce < 10) {
+      items <- .parseJSON(.sendRequest(request))
+      #items <- try(fromJSON(try(getURL(request))))
+      ce <- ce + 1
+    }
+    if (class(items) == "try-error"){
+      stop("\n Server connection timeout. Verify the URL or try again later.")
+      return(items)
+    }
+    return(unlist(items, use.names = FALSE))
+  }
+}
 
 #' Describe coverage
 #'
@@ -128,17 +150,44 @@ setMethod("list_coverages","wtss",
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
-#' #objdesc = describeCoverages(obj,"MOD09Q1")
-setGeneric("describe_coverage",function(object,coverages){standardGeneric("describe_coverage")})
+#' #obj = wtss("http://www.dpi.inpe.br/mds/mds")
+#' #objdesc = describeCoverage(obj,"MOD09Q1")
+setGeneric("describeCoverage",function(object,coverages){standardGeneric("describeCoverage")})
 
 
-#' @rdname  describe_coverage
-setMethod("describe_coverage","wtss",
+#' @rdname  describeCoverage
+setMethod("describeCoverage","wtss",
           function(object,coverages){
-            .describe_coverage(object,coverages) 
+            .describeCoverage(object,coverages) 
           }
 )
+
+.describeCoverage <- function(object,coverages)
+{
+  url <- getServerUrl(object)
+  items <- 0
+  class(items) <- "try-error"
+  ce <- 0
+  
+  if( length(url) == 1 && nchar(url) > 1 ){
+    out <- lapply(coverages, function(cov){
+      #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
+      request <- paste(url,"dataset_list?product=",cov,"&output_format=json",sep="")
+      while(class(items) == "try-error" & ce < 10) {
+        items <- .parseJSON(.sendRequest(request))#items <- try(fromJSON(try(getURL(request))))
+        ce <- ce + 1
+      }
+      if (class(items) == "try-error"){
+        stop("\n Server connection timeout. Verify the URL or try again later.")
+        return(items)
+      }
+      #return(items$attributes)
+      return(items$datasets)
+    })
+    names(out) <- coverages
+    return(out)
+  }
+}
 
 #' Get time series
 #'
@@ -154,16 +203,16 @@ setMethod("describe_coverage","wtss",
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' #obj = wtss("http://www.dpi.inpe.br/mds/mds")
 #' #objlist = listCoverages(obj)
 #' #objdesc = describeCoverages(obj,objlist)
-#' #tsAll = getTimeSeries(obj, coverages=objdesc, longitude=-45, latitude=-12, from="2004-01-01", to="2004-05-01")
-setGeneric("time_series",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("time_series")})
+#' #tsAll = getTimeSeries(obj, objdesc,-45,-12,"2004-01-01","2004-05-01")
+setGeneric("timeSeries",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("timeSeries")})
 
-#' @rdname  time_series
-setMethod("time_series","wtss",
+#' @rdname  timeSeries
+setMethod("timeSeries","wtss",
           function(object,coverages,attributes,longitude,latitude,start,end){
-            .time_series(object,coverages,attributes,longitude,latitude,start,end)
+            .timeSeries(object,coverages,attributes,longitude,latitude,start,end)
           }
 )
 
@@ -180,11 +229,11 @@ setMethod("time_series","wtss",
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' #obj = wtss("http://www.dpi.inpe.br/mds/mds")
 #' #objlist = listCoverages(obj)
 #' #objdesc = describeCoverages(obj,objlist)
 #' #coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))
-#' #tsAll = getListOfTimeSeries(obj, coverages=objdesc, coordinates=coordinates, from="2004-01-01", to="2004-05-01")
+#' #tsAll = getListOfTimeSeries(obj, objdesc, coordinates, "2004-01-01", "2004-05-01")
 setGeneric("getListOfTimeSeries",function(object,coverages,attributes,coordinates,start,end){standardGeneric("getListOfTimeSeries")})
 
 #' @rdname  getListOfTimeSeries
@@ -197,61 +246,14 @@ setMethod("getListOfTimeSeries","wtss",
             out <- lapply(coordinates, function(coords){
               longitude <- coords[1]
               latitude <- coords[2]
-              items <- .time_series(object,coverages,attributes,longitude,latitude,start,end)
+              items <- .timeSeries(object,coverages,attributes,longitude,latitude,start,end)
             })
             return(out)
           }
 )
 
-.list_coverages <- function(object)
-{
-  url <- getServerUrl(object)
-  items <- 0
-  class(items) <- "try-error"
-  ce <- 0
-  if( length(url) == 1 && nchar(url) > 1 ){
-    #request <- paste(url,"list_coverages?output_format=json",sep="")
-    request <- paste(url,"product_list?output_format=json",sep="")
-    while(class(items) == "try-error" & ce < 10) {
-      items <- .parseJSON(.sendrequest(request))#items <- try(fromJSON(try(getURL(request))))
-      ce <- ce + 1
-    }
-    if (class(items) == "try-error"){
-      stop("\n Server connection timeout. Verify the URL or try again later.")
-      return(items)
-    }
-    return(unlist(items, use.names = FALSE))
-  }
-}
 
-.describe_coverage <- function(object,coverages)
-{
-  url <- getServerUrl(object)
-  items <- 0
-  class(items) <- "try-error"
-  ce <- 0
-  
-  if( length(url) == 1 && nchar(url) > 1 ){
-    out <- lapply(coverages, function(cov){
-      #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
-      request <- paste(url,"dataset_list?product=",cov,"&output_format=json",sep="")
-      while(class(items) == "try-error" & ce < 10) {
-        items <- .parseJSON(.sendrequest(request))#items <- try(fromJSON(try(getURL(request))))
-        ce <- ce + 1
-      }
-      if (class(items) == "try-error"){
-        stop("\n Server connection timeout. Verify the URL or try again later.")
-        return(items)
-      }
-      #return(items$attributes)
-      return(items$datasets)
-    })
-    names(out) <- coverages
-    return(out)
-  }
-}
-
-.time_series <- function(object,coverages,attributes,longitude,latitude,start,end)
+.timeSeries <- function(object,coverages,attributes,longitude,latitude,start,end)
 {
   if(missing(object))
     stop("Missing either a wtss object or a server URL.")
@@ -270,11 +272,11 @@ setMethod("getListOfTimeSeries","wtss",
     if(is.list(coverages)){
       out <- lapply(names(coverages), function(cov){
         attributes <- coverages[[cov]]
-        request <- paste(url,"query?product=",cov,"&datasets=",paste(datasets, collapse=","),
+        request <- paste(url,"query?product=",cov,"&datasets=",paste(attributes, collapse=","),
                          "&latitude=",latitude,"&longitude=",longitude,
                          "&start=",start,"&end=",end,"&output_format=json",sep="")
         while(class(items) == "try-error" & ce < 10) {
-          items <- .parseJSON(.sendrequest(request))#items <- try(fromJSON(try(getURL(request))))
+          items <- .parseJSON(.sendRequest(request))#items <- try(fromJSON(try(getURL(request))))
           ce <- ce + 1
         }
         if (class(items) == "try-error"){
@@ -291,7 +293,7 @@ setMethod("getListOfTimeSeries","wtss",
                        "&latitude=",latitude,"&longitude=",longitude,
                        "&start=",start,"&end=",end,"&output_format=json",sep="")
       while(class(items) == "try-error" & ce < 10) {
-        items <- .parseJSON(.sendrequest(request))#items <- try(fromJSON(try(getURL(request))))
+        items <- .parseJSON(.sendRequest(request))#items <- try(fromJSON(try(getURL(request))))
         ce <- ce + 1
       }
       if (class(items) == "try-error"){
@@ -337,20 +339,29 @@ setMethod("getListOfTimeSeries","wtss",
   )
 }
 
-.sendrequest <- function(request){
+.sendRequest <- function(request)
+{
   res = tryCatch({
     getURL(request)
   }, error = function(e) {
-    stop("ERROR: An error occurred while retrieving data.")
+    if(grep("Could not resolve host: ", e$message) == 1)
+      e$message <- toJSON("error: Request to the web time series service failed. The URL server may be incorrect or the service does not exist.")
+    stop(e$message)
   })
+  
   return(res)
 }
 
-.parseJSON <- function(atext){
+.parseJSON <- function(atext)
+{
   res = tryCatch({
     fromJSON(atext)
   }, error = function(e) {
-    stop(paste("ERROR: An error occurred while parsing JSON", e, sep = " - "))
+    if (length(e$message) > 1)
+      if(grep("Error in fromJSON(atext): unexpected character '<'", e$message) == 1)
+        e$message <- toJSON("error: Request to the web time series service failed. The web service may be temporaly down.")
+    stop(e$message)
   })
+  
   return(res)
 }

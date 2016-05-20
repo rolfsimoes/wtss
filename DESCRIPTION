@@ -4,13 +4,14 @@ Title: R client for WTSS
 Version: 0.1.2
 Date: 2016-02-16
 Authors@R: c(person("Victor", "Maus", role = c("aut"),email
-    ="vwmaus1@gmail.com"), person("Alber", "Sanchez", role = c("aut",
-    "cre"),email ="albhasan@gmail.com"), person("Luiz Fernando", "Assis", role = c("aut",
-    "cre"),email ="luizffga@dpi.inpe.br"), person("Gilberto", "Ribeiro", role = c("aut",
-    "cre"),email ="gribeiro@dpi.inpe.br"))
+    ="vwmaus1@gmail.com"), person("Alber", "Sanchez", 
+    role = c("aut"),email ="albhasan@gmail.com"), 
+    person("Luiz Fernando", "Assis", role = c("aut",
+    "cre"),email ="luizffga@dpi.inpe.br"), person("Gilberto", "Ribeiro", 
+    role = c("aut"),email ="gribeiro@dpi.inpe.br"))
 Author: Alber Sanchez, Victor Maus, Luiz Fernando Assis, Gilberto Ribeiro
 Maintainer: Luiz Fernando Assis <luizffga@dpi.inpe.br>
-Description: R client for the Web Time Series Service (WTSS).
+Description: R client API for Web Time Series Service (WTSS).
 Depends:
     R (>= 3.0.0)
 Imports:
@@ -20,5 +21,5 @@ Imports:
     rjson,
     testthat,
     zoo
-License: LGPL + file LICENSE
+License: LGPL-3 + file LICENSE
 RoxygenNote: 5.0.1
