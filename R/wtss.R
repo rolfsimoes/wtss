@@ -76,11 +76,11 @@ setMethod (
     if(!missing(serverUrl))
     {
       .Object@serverUrl <- serverUrl
-      .Object@exploreArrays <- .listCoverages(.Object)
-      #if(class(exploreArrays) == "try-error")
-       # stop(exploreArrays)
-      #else
-      #.Object@exploreArrays <- exploreArrays
+      exploreArrays <- .listCoverages(.Object)
+       if(class(exploreArrays) == "try-error")
+         stop(exploreArrays)
+       else
+       .Object@exploreArrays <- exploreArrays
       #.Object@exploreArrays <- .listCoverages(.Object)
       validObject(.Object)
     }else{
@@ -496,16 +496,13 @@ setMethod("timeSeries","wtss",
   if (url.exists(request))
     response <- getURL(request)
   else
+  {
+    # no valid http page error handling
     response <- "ERROR: Request to the web time series service failed. The URL server may be incorrect or the service does not exist."
+    class(response) <- "try-error"
+  }
 
-#  cat("length(response) = ",length(response))
-#  cat("response = ",response)
-  
-#  if (length(response) > 1)
-#      if(grep("ERROR", response) == 1)
-#        class(response) <- "try-error"
-    
-  return(response)
+    return(response)
       
 }
 
@@ -516,13 +513,11 @@ setMethod("timeSeries","wtss",
   if (validate(response))
     json_response <- fromJSON(response)
   else
-    json_response <- toJSON("ERROR: Request to the web time series service failed. The URL server may be incorrect or the service does not exist.")
-  
-#  cat("response = ", names(json_response), "\n")
-#  cat("response = ", class(json_response), "\n")
-  
-#  if (grep("ERROR", json_response) == 1)
-#    class(json_response) <- "try-error"
-  
+  {
+    # no json returned error handling
+    json_response <- toJSON("ERROR: Request to the web time series service failed. The service may be down!")
+    class(json_response) <- "try-error"
+  }
+
   return(json_response)
 }
