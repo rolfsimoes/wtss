@@ -228,7 +228,7 @@ setMethod("listCoverages","wtss",
 #' @export
 #' @examples
 #' #obj = wtss("http://www.dpi.inpe.br/ts/wtss")
-#' #objdesc = describeCoverage(obj,"MOD09Q1")
+#' #objdesc = describeCoverage(obj,"hotspot_monthly")
 setGeneric("describeCoverage",function(object,coverages){standardGeneric("describeCoverage")})
 
 
@@ -291,21 +291,21 @@ setMethod("describeCoverage","wtss",
 #' @examples
 #' #obj = wtss("http://www.dpi.inpe.br/ts/wtss")
 #' #objlist = listCoverages(obj)
-#' #objdesc = describeCoverages(obj,objlist)
-#' #coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))
-#' #tsAll = getListOfTimeSeries(obj, objdesc, coordinates, "2004-01-01", "2004-05-01")
-setGeneric("getListOfTimeSeries",function(object,coverages,attributes,coordinates,start,end){standardGeneric("getListOfTimeSeries")})
+#' #objdesc = describeCoverage(obj,objlist[2])
+#' #coordinates = list(c(-45,-12),  c(-54,-11))
+#' #tsList = listTimeSeries(obj, names(objdesc), objdesc[[1]]$name, coordinates, "2004-01", "2004-05")
+setGeneric("listTimeSeries",function(object,coverages,attributes,coordinates,start,end){standardGeneric("listTimeSeries")})
 
-#' @rdname  getListOfTimeSeries
-setMethod("getListOfTimeSeries","wtss",
+#' @rdname  listTimeSeries
+setMethod("listTimeSeries","wtss",
           function(object,coverages,attributes,coordinates,start,end)
           {
-            
+            # check type of the list of coordinates 
             if( is.data.frame(coordinates) | is.matrix(coordinates))
               coordinates <- lapply(1:dim(coordinates)[1], function(i) coordinates[i,])
             
             if(!is.list(coordinates))
-              stop("Missing a list. Please informe a list of longitude latitude coordinates in WGS84 coordinate system.")
+              stop("Missing a list. Please insert a list of longitude latitude coordinates in WGS84 coordinate system.")
             
             out <- lapply(coordinates, function(coords)
             {
@@ -336,7 +336,7 @@ setMethod("getListOfTimeSeries","wtss",
 #' #obj = wtss("http://www.dpi.inpe.br/ts/wtss")
 #' #objlist = listCoverages(obj)
 #' #objdesc = describeCoverages(obj,objlist)
-#' #tsAll = timeSeries(obj, objdesc,-45,-12,"2004-01-01","2004-05-01")
+#' #ts = timeSeries(obj, names(objdesc), objdesc[[1]]$name, -45,-12,"2004-01-01","2004-05-01")
 setGeneric("timeSeries",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("timeSeries")})
 
 #' @rdname  timeSeries
@@ -482,7 +482,7 @@ setMethod("timeSeries","wtss",
       timeline = as.Date(as.yearmon(timeline))
   else # if weekly date
       if(format == "%Y-%m-%d")
-        timeline = as.Date(timeline)
+        timeline = as.Date(timeline, format)
 
   return(list(center_coordinate = data.frame(longitude=items$result$center_coordinate$longitude, latitude=items$result$center_coordinate$latitude), 
                attributes = zoo(attributes.processed, timeline))
