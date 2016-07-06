@@ -26,13 +26,13 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 
 - Load the wtss.R package <code>library(wtss.R)</code>
 
-- Create a connection <code>chronos = wtss("http://www.dpi.inpe.br/mds/mds")</code>
+- Create a connection <code> ts_server = wtss("http://www.dpi.inpe.br/ts/wtss")</code>
 
-- Get the list of coverages provided by the service <code>coverages = listCoverages(chronos)</code>
+- Get the list of coverages provided by the service <code>coverages = listCoverages(ts_server)</code>
 
-- Get the description of the first coverage <code>cv = describeCoverage(chronos,coverages[3])</code>
+- Get the description of the second coverage <code>cv = describeCoverage(chronos,coverages[2])</code>
 
-- Get a time series <code>ts = timeSeries(chronos, names(cv), attributes="ndvi", latitude=-10.408, longitude=-53.495, start="2000-01-01", end="2016-04-15")</code>
+- Get a time series <code>ts = timeSeries(ts_server, names(cv), attributes=cv[[1]]$name, latitude=-13.0, longitude=-55.0, start="2000-02", end="2006-04")</code>
 
 <b>NOTE:</b> For older R versions, it is also necessary to install the <i>digest</i> package.
  
