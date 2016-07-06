@@ -18,8 +18,9 @@ Imports:
     methods,
     roxygen2,
     RCurl,
-    rjson,
+    jsonlite,
     testthat,
-    zoo
+    zoo,
+    lubridate
 License: LGPL-3 + file LICENSE
 RoxygenNote: 5.0.1
