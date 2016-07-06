@@ -19,7 +19,7 @@ describeCoverage(object, coverages)
 Describe coverage
 }
 \examples{
-#obj = wtss("http://www.dpi.inpe.br/mds/mds")
+#obj = wtss("http://www.dpi.inpe.br/ts/wtss")
 #objdesc = describeCoverage(obj,"MOD09Q1")
 }
 

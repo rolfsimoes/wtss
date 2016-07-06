@@ -28,7 +28,7 @@ getListOfTimeSeries(object, coverages, attributes, coordinates, start, end)
 This function retrieves the time series for a list of coordinates.
 }
 \examples{
-#obj = wtss("http://www.dpi.inpe.br/mds/mds")
+#obj = wtss("http://www.dpi.inpe.br/ts/wtss")
 #objlist = listCoverages(obj)
 #objdesc = describeCoverages(obj,objlist)
 #coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))

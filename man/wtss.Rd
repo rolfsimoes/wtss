@@ -23,11 +23,11 @@ No notes
 
 \describe{
 \item{\code{serverUrl}:}{Object of class \code{"character"}, URL of the server.}
-\item{\code{coverages}:}{List of coverages \code{"character"}.}
+\item{\code{exploreArrays}:}{List of arrays \code{"character"}.}
 }
 }
 \examples{
-#obj = wtss("http://www.dpi.inpe.br/mds/mds")
+#obj = wtss("http://www.dpi.inpe.br/ts/wtss")
 }
 \author{
 Victor Maus, Alber Sanchez, Luiz Fernando Assis, Gilberto Ribeiro

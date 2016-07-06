@@ -30,9 +30,9 @@ timeSeries(object, coverages, attributes, longitude, latitude, start, end)
 This function retrieves the time series for a pair of coordinates.es
 }
 \examples{
-#obj = wtss("http://www.dpi.inpe.br/mds/mds")
+#obj = wtss("http://www.dpi.inpe.br/ts/wtss")
 #objlist = listCoverages(obj)
 #objdesc = describeCoverages(obj,objlist)
-#tsAll = getTimeSeries(obj, objdesc,-45,-12,"2004-01-01","2004-05-01")
+#tsAll = timeSeries(obj, objdesc,-45,-12,"2004-01-01","2004-05-01")
 }
 
