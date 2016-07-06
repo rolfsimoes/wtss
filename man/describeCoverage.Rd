@@ -20,6 +20,6 @@ Describe coverage
 }
 \examples{
 #obj = wtss("http://www.dpi.inpe.br/ts/wtss")
-#objdesc = describeCoverage(obj,"MOD09Q1")
+#objdesc = describeCoverage(obj,"hotspot_monthly")
 }
 
