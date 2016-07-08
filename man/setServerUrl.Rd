@@ -3,15 +3,15 @@
 \docType{methods}
 \name{setServerUrl}
 \alias{setServerUrl}
-\alias{setServerUrl,wtss-method}
+\alias{setServerUrl,WTSS-method}
 \title{Sets the object's server URL}
 \usage{
 setServerUrl(object, aServerUrl)
 
-\S4method{setServerUrl}{wtss}(object, aServerUrl)
+\S4method{setServerUrl}{WTSS}(object, aServerUrl)
 }
 \arguments{
-\item{object}{A wtss object}
+\item{object}{A WTSS object}
 
 \item{aServerUrl}{A character representing the server URL}
 }

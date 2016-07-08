@@ -3,21 +3,21 @@
 \docType{methods}
 \name{listCoverages}
 \alias{listCoverages}
-\alias{listCoverages,wtss-method}
+\alias{listCoverages,WTSS-method}
 \title{List coverages}
 \usage{
 listCoverages(object)
 
-\S4method{listCoverages}{wtss}(object)
+\S4method{listCoverages}{WTSS}(object)
 }
 \arguments{
-\item{object}{A wtss object}
+\item{object}{A WTSS object}
 }
 \description{
 List coverages
 }
 \examples{
-#obj = wtss("http://www.dpi.inpe.br/ts/wtss")
-#objlist = listCoverages(obj)
+obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+objlist = listCoverages(obj)
 }
 

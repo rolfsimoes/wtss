@@ -3,15 +3,15 @@
 \docType{methods}
 \name{describeCoverage}
 \alias{describeCoverage}
-\alias{describeCoverage,wtss-method}
+\alias{describeCoverage,WTSS-method}
 \title{Describe coverage}
 \usage{
 describeCoverage(object, coverages)
 
-\S4method{describeCoverage}{wtss}(object, coverages)
+\S4method{describeCoverage}{WTSS}(object, coverages)
 }
 \arguments{
-\item{object}{A wtss object}
+\item{object}{A WTSS object}
 
 \item{coverages}{A character vector of coverage names}
 }
@@ -19,7 +19,7 @@ describeCoverage(object, coverages)
 Describe coverage
 }
 \examples{
-#obj = wtss("http://www.dpi.inpe.br/ts/wtss")
-#objdesc = describeCoverage(obj,"hotspot_monthly")
+obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+objdesc = describeCoverage(obj,"hotspot_monthly")
 }
 

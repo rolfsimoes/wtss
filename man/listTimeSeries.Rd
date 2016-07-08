@@ -3,16 +3,16 @@
 \docType{methods}
 \name{listTimeSeries}
 \alias{listTimeSeries}
-\alias{listTimeSeries,wtss-method}
+\alias{listTimeSeries,WTSS-method}
 \title{Get list of time series}
 \usage{
 listTimeSeries(object, coverages, attributes, coordinates, start, end)
 
-\S4method{listTimeSeries}{wtss}(object, coverages, attributes, coordinates,
+\S4method{listTimeSeries}{WTSS}(object, coverages, attributes, coordinates,
   start, end)
 }
 \arguments{
-\item{object}{Either a wtss object or a server URL}
+\item{object}{Either a WTSS object or a server URL}
 
 \item{coverages}{Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.}
 
@@ -28,7 +28,7 @@ listTimeSeries(object, coverages, attributes, coordinates, start, end)
 This function retrieves the time series for a list of coordinates.
 }
 \examples{
-#obj = wtss("http://www.dpi.inpe.br/ts/wtss")
+#obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
 #objlist = listCoverages(obj)
 #objdesc = describeCoverage(obj,objlist[2])
 #coordinates = list(c(-45,-12),  c(-54,-11))
