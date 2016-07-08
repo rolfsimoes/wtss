@@ -1,8 +1,5 @@
 # installing and loading packages
-library(devtools)
 library(bfast)
-# installing and loading wtss.R
-install_github("e-sensing/wtss.R")
 library(wtss.R)
 
 # create a connection using a serverUrl
