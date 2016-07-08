@@ -1,7 +1,6 @@
-# installing and loading devtools
-install.packages("devtools")
+# installing and loading packages
 library(devtools)
-
+library(bfast)
 # installing and loading wtss.R
 install_github("e-sensing/wtss.R")
 library(wtss.R)
@@ -20,18 +19,6 @@ ts = timeSeries(chronos, names(cv), attributes="ndvi", latitude=-10.408, longitu
 
 # plot the time-series in a zoo object
 plot(ts$MOD13Q1$attributes$ndvi)
-
-# installing and loading zoo
-#install.packages("zoo")
-library(zoo)
-
-# installing and loading lubridate
-install.packages("lubridate")
-library(lubridate)
-
-# installing and loading bfast
-install.packages("bfast", repos="http://R-Forge.R-project.org", type = "source")
-library(bfast)
 
 # time series in a ts object with all the original values
 time_series_ts1 = ts(coredata(ts$MOD13Q1$attributes$ndvi), freq=365.25/(as.numeric(difftime(index(ts$MOD13Q1$attributes$ndvi[2]),index(ts$MOD13Q1$attributes$ndvi[1]),units = "days"))), start=decimal_date(ymd(index(ts$MOD13Q1$attributes$ndvi[1]))))
