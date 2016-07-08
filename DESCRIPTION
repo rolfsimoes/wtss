@@ -1,19 +1,19 @@
 Package: wtss.R
 Type: Package
-Title: R client for WTSS
+Title: An R client for handling remote sensing imagery as time series
 Version: 0.1.2
 Date: 2016-02-16
 Authors@R: c(person("Victor", "Maus", role = c("aut"),email
     ="vwmaus1@gmail.com"), person("Alber", "Sanchez", 
-    role = c("aut"),email ="albhasan@gmail.com"), 
+    role = c("aut"),email ="alber.ipia@dpi.inpe.com"), 
     person("Luiz Fernando", "Assis", role = c("aut",
-    "cre"),email ="luizffga@dpi.inpe.br"), person("Gilberto", "Ribeiro", 
+    "cre"),email ="luizffga@dpi.inpe.br"), person("Pedro", "Andrade", 
+    role = c("aut"),email ="pedro.andrade@dpi.inpe.br"), person("Gilberto", "Ribeiro", 
     role = c("aut"),email ="gribeiro@dpi.inpe.br"))
-Author: Alber Sanchez, Victor Maus, Luiz Fernando Assis, Gilberto Ribeiro
+Author: Victor Maus, Alber Sanchez, Luiz Fernando Assis, Pedro Andrade, Gilberto Ribeiro
 Maintainer: Luiz Fernando Assis <luizffga@dpi.inpe.br>
-Description: R client API for Web Time Series Service (WTSS).
-Depends:
-    R (>= 3.0.0)
+Description: wtss.R is an R client package for Web Time-Series Service (WTSS). It allows Earth observation users to request in near real-time metadata based on coverages available on WTSS. It provides classes and methods for handling remote sensing imagery as time series based using spatio-temporal filtering. Coverages include but are not limited to daily and montlhy aggregated hotspot data of vegetation fires, and MODIS data. 
+Depends: R (>= 3.0.0)
 Imports:
     methods,
     roxygen2,
@@ -24,3 +24,5 @@ Imports:
     lubridate
 License: LGPL-3 + file LICENSE
 RoxygenNote: 5.0.1
+URL: http://www.dpi.inpe.br/esensing
+BugReports:  esensing-developers@dpi.inpe.br
