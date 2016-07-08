@@ -1,34 +1,34 @@
-#' The wtss class
+#' The WTSS class
 #'
-#' Use this class for representing a client of a WTSS
-#'
+#' Use this class for creating a connection to a Web Time-Series Service (WTSS)
+#'   
 #'@section Slots :
 #' \describe{
 #' \item{\code{serverUrl}:}{Object of class \code{"character"}, URL of the server.}
-#' \item{\code{exploreArrays}:}{List of arrays \code{"character"}.}
+#' \item{\code{listCoverages}:}{Object of class \code{"character"}, list of coverages.}
 #' }
 #'
 #' @note No notes
-#' @name wtss
-#' @aliases wtss-class
-#' @exportClass wtss
-#' @author Victor Maus, Alber Sanchez, Luiz Fernando Assis, Gilberto Ribeiro
+#' @name WTSS
+#' @aliases WTSS-class
+#' @exportClass WTSS
+#' @author Victor Maus, Alber Sanchez, Luiz Fernando Assis, Pedro Andrade, Gilberto Ribeiro
 #' @import jsonlite
-#' @import RCurl
+#' @import lubridate
 #' @import methods
+#' @import RCurl
 #' @import roxygen2
 #' @import testthat
 #' @import zoo
-#' @import lubridate
 setClass (
   
   # Set the name for the class
-  Class = "wtss",
+  Class = "WTSS",
   
   # Define the slots
   slots = c(
     serverUrl = "character",
-    exploreArrays = "character"
+    listCoverages = "character"
   ),
   
   # Set the default values for the slots.
@@ -38,20 +38,20 @@ setClass (
   validity = function(object)
   {
     if(length(object@serverUrl) != 1){
-      stop ("[wtss: validation] Invalid server URL.")
+      stop ("[WTSS: validation] Invalid server URL.")
     }
     
     if(nchar(object@serverUrl) <= 1){
-      stop ("[wtss: validation] Invalid server URL.")
+      stop ("[WTSS: validation] Invalid server URL.")
     }
     
 #     if(length(object@exploreArrays) <= 1){
-#       stop ("[wtss: validation] Invalid server URL.")
+#       stop ("[WTSS: validation] Invalid server URL.")
 #     }
 #     
 #     cat("nchar(object@exploreArrays = ",nchar(object@exploreArrays))
 #     if(nchar(object@exploreArrays) <= 1){
-#       stop ("[wtss: validation] Invalid server URL.")
+#       stop ("[WTSS: validation] Invalid server URL.")
 #     }
     
     return(TRUE)
@@ -67,7 +67,7 @@ setMethod (
   f="initialize",
   
   # Method signature
-  signature="wtss",
+  signature="WTSS",
   
   # Function definition
   definition=function(.Object, serverUrl)
@@ -76,11 +76,11 @@ setMethod (
     if(!missing(serverUrl))
     {
       .Object@serverUrl <- serverUrl
-      exploreArrays <- .listCoverages(.Object)
-       if(class(exploreArrays) == "try-error")
-         stop(exploreArrays)
+      arrays <- .listCoverages(.Object)
+       if(class(arrays) == "try-error")
+         stop(arrays)
        else
-       .Object@exploreArrays <- exploreArrays
+       .Object@listCoverages <- arrays
       #.Object@exploreArrays <- .listCoverages(.Object)
       validObject(.Object)
     }else{
@@ -90,17 +90,17 @@ setMethod (
   }
 )
 
-#' Creates a wtss object
+#' Creates a WTSS object
 #'
 #' @param serverUrl A server URL
-#' @rdname wtss
+#' @rdname WTSS
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtss("http://www.dpi.inpe.br/ts/wtss")
-wtss <- function(serverUrl)
+#' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+WTSS <- function(serverUrl)
 {
-  new (Class="wtss",serverUrl = serverUrl)
+  new (Class="WTSS",serverUrl = serverUrl)
 }
 
 #*******************************************************
@@ -112,21 +112,21 @@ setMethod (
   f = "show", 
   
   # Method signature
-  signature = "wtss", 
+  signature = "WTSS", 
   
   # Stylish print of the objects
   definition=function(object)
   {
     
     # initial message
-    cat(paste("Object of Class wtss\n\n"))
+    cat(paste("Object of Class WTSS\n\n"))
     
-    # serverUrl
+    # print serverUrl
     cat(paste("serverUrl: ",paste(object@serverUrl),  "\n"))
     
-    # exploreArrays
-    cat("exploreArrays: ")
-    cat(paste(object@exploreArrays), " ")
+    # print listCoverages
+    cat("listCoverages: ")
+    cat(paste(object@listCoverages), " ")
     
     return(invisible())
   }
@@ -139,7 +139,7 @@ setGeneric(name="show", def=function(object){standardGeneric("show")})
 
 #' Returns the object's server URL
 #'
-#' @param object A wtss object
+#' @param object A WTSS object
 #' @docType methods
 #' @aliases getServerUrl-generic
 #' @export
@@ -147,7 +147,7 @@ setGeneric(name="show", def=function(object){standardGeneric("show")})
 setGeneric("getServerUrl",function(object){standardGeneric ("getServerUrl")})
 
 #' @rdname getServerUrl
-setMethod("getServerUrl","wtss",
+setMethod("getServerUrl","WTSS",
           function(object)
           {
             if(substr(object@serverUrl,nchar(object@serverUrl),nchar(object@serverUrl))!="/")
@@ -158,14 +158,14 @@ setMethod("getServerUrl","wtss",
 
 #' Sets the object's server URL
 #'
-#' @param object A wtss object
+#' @param object A WTSS object
 #' @param aServerUrl A character representing the server URL
 #' @docType methods
 #' @export
 setGeneric("setServerUrl",function(object, aServerUrl){standardGeneric ("setServerUrl")})
 
 #' @rdname  setServerUrl
-setMethod("setServerUrl","wtss",
+setMethod("setServerUrl","WTSS",
           function(object, aServerUrl){
             object@serverUrl <- aServerUrl
           }
@@ -173,16 +173,16 @@ setMethod("setServerUrl","wtss",
 
 #' List coverages 
 #'
-#' @param object A wtss object
+#' @param object A WTSS object
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtss("http://www.dpi.inpe.br/ts/wtss")
-#' #objlist = listCoverages(obj)
+#' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+#' objlist = listCoverages(obj)
 setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
 
 #' @rdname  listCoverages
-setMethod("listCoverages","wtss",
+setMethod("listCoverages","WTSS",
           function(object)
           {
             .listCoverages(object) 
@@ -222,18 +222,18 @@ setMethod("listCoverages","wtss",
 
 #' Describe coverage
 #'
-#' @param object A wtss object
+#' @param object A WTSS object
 #' @param coverages A character vector of coverage names
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtss("http://www.dpi.inpe.br/ts/wtss")
-#' #objdesc = describeCoverage(obj,"hotspot_monthly")
+#' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+#' objdesc = describeCoverage(obj,"hotspot_monthly")
 setGeneric("describeCoverage",function(object,coverages){standardGeneric("describeCoverage")})
 
 
 #' @rdname  describeCoverage
-setMethod("describeCoverage","wtss",
+setMethod("describeCoverage","WTSS",
           function(object,coverages){
             .describeCoverage(object,coverages) 
           }
@@ -247,7 +247,7 @@ setMethod("describeCoverage","wtss",
   class(items) <- "try-error"
   ce <- 0
   
-  if( length(url) == 1 && nchar(url) > 1 )
+  if(length(url) == 1 && nchar(url) > 1)
   {
     out <- lapply(coverages, function(cov)
           {
@@ -255,7 +255,7 @@ setMethod("describeCoverage","wtss",
             # concat describe_coverage according to a name into the service URL 
             request <- paste(url,"describe_coverage?name=", cov, sep="")
             
-            # try only 10 times (avoid time out connection)
+            # avoid time out connection 
             while(class(items) == "try-error" & ce < 10) {
               items <- .parseJSON(.sendRequest(request))
               ce <- ce + 1
@@ -265,7 +265,7 @@ setMethod("describeCoverage","wtss",
             if (class(items) == "try-error")
               return(items)
             
-            return(items$attributes)
+            return(items)
         })
     
     names(out) <- coverages
@@ -280,7 +280,7 @@ setMethod("describeCoverage","wtss",
 #'
 #' @description This function retrieves the time series for a list of coordinates.
 #'
-#' @param object Either a wtss object or a server URL
+#' @param object Either a WTSS object or a server URL
 #' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
 #' @param coordinates A list or data frame of longitude latitude coordinates in WGS84 coordinate system.
@@ -289,7 +289,7 @@ setMethod("describeCoverage","wtss",
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtss("http://www.dpi.inpe.br/ts/wtss")
+#' #obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
 #' #objlist = listCoverages(obj)
 #' #objdesc = describeCoverage(obj,objlist[2])
 #' #coordinates = list(c(-45,-12),  c(-54,-11))
@@ -297,7 +297,7 @@ setMethod("describeCoverage","wtss",
 setGeneric("listTimeSeries",function(object,coverages,attributes,coordinates,start,end){standardGeneric("listTimeSeries")})
 
 #' @rdname  listTimeSeries
-setMethod("listTimeSeries","wtss",
+setMethod("listTimeSeries","WTSS",
           function(object,coverages,attributes,coordinates,start,end)
           {
             # check type of the list of coordinates 
@@ -323,7 +323,7 @@ setMethod("listTimeSeries","wtss",
 #'
 #' @description This function retrieves the time series for a pair of coordinates.es
 #' 
-#' @param object Either a wtss object or a server URL
+#' @param object Either a WTSS object or a server URL
 #' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
 #' @param longitude A longitude in WGS84 coordinate system.
@@ -333,14 +333,14 @@ setMethod("listTimeSeries","wtss",
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = wtss("http://www.dpi.inpe.br/ts/wtss")
-#' #objlist = listCoverages(obj)
-#' #objdesc = describeCoverages(obj,objlist)
-#' #ts = timeSeries(obj, names(objdesc), objdesc[[1]]$name, -45,-12,"2004-01-01","2004-05-01")
+#' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+#' objlist = listCoverages(obj)
+#' objdesc = describeCoverage(obj,objlist[2])
+#' ts = timeSeries(obj, names(objdesc), objdesc[[1]]$attributes$name, -45,-12,"2004-01","2004-05")
 setGeneric("timeSeries",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("timeSeries")})
 
 #' @rdname  timeSeries
-setMethod("timeSeries","wtss",
+setMethod("timeSeries","WTSS",
           function(object,coverages,attributes,longitude,latitude,start,end)
           {
           
@@ -353,7 +353,7 @@ setMethod("timeSeries","wtss",
 {
   
   if(missing(object))
-    stop("Missing either a wtss object or a server URL.")
+    stop("Missing either a WTSS object or a server URL.")
   
   items <- 0
   class(items) <- "try-error"
@@ -361,7 +361,7 @@ setMethod("timeSeries","wtss",
   
   url <- object
   
-  if(class(object)=="wtss")
+  if(class(object)=="WTSS")
     url <- getServerUrl(object)
   
   if(length(url) == 1 && nchar(url) > 1)
@@ -372,7 +372,7 @@ setMethod("timeSeries","wtss",
       
       out <- lapply(names(coverages), function(cov)
              {
-                attributes <- coverages[[cov]]
+                #attributes <- coverages[[cov]]
                 
                 request <- paste(url,"time_series?coverage=",cov,"&attributes=",paste(attributes, collapse=","),
                                  "&latitude=",latitude,"&longitude=",longitude,
