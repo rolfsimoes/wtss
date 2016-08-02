@@ -22,7 +22,7 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
  
 - Load devtools <code>library(devtools)</code>
 
-- Install the wtss.R package <code>install_github("e-sensing/wtss.R")</code>
+- Install the wtss.R package <code>install_github("luizassis/wtss.R")</code>
 
 - Load the wtss.R package <code>library(wtss.R)</code>
 
