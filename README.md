@@ -26,7 +26,7 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 
 - Load the wtss.R package <code>library(wtss.R)</code>
 
-- Create a connection <code> ts_server = wtss("http://www.dpi.inpe.br/ts/wtss")</code>
+- Create a connection <code> ts_server = WTSS("http://www.dpi.inpe.br/ts/wtss")</code>
 
 - Get the list of coverages provided by the service <code>coverages = listCoverages(ts_server)</code>
 
