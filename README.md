@@ -38,7 +38,7 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
  
 ## Building Instructions
 
-- Clone the project: <code>git clone https//github.com/e-sensing/wtss.R.git</code>.
+- Clone the project: <code>git clone https//github.com/luizassis/wtss.R.git</code>.
 
 - Open Rstudio, go to File - Open Project and pick the file <code>wtss.R.Rproj</code>.
 
@@ -51,7 +51,7 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 
 ## Reporting Bugs
 
-Any problem should be reported to esensing-developers@dpi.inpe.br.
+Any problem should be reported to luizffga@dpi.inpe.br.
 
 
-For more information on wtss.R, please, visit its main web page at: http://www.dpi.inpe.br/esensing.
+<!--For more information on wtss.R, please, visit its main web page at: http://www.dpi.inpe.br/esensing.-->
