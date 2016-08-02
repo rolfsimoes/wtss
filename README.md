@@ -30,7 +30,7 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 
 - Get the list of coverages provided by the service <code>coverages = listCoverages(ts_server)</code>
 
-- Get the description of the second coverage <code>cv = describeCoverage(chronos,coverages[2])</code>
+- Get the description of the second coverage <code>cv = describeCoverage(ts_server,coverages[2])</code>
 
 - Get a time series <code>ts = timeSeries(ts_server, names(cv), attributes=cv[[1]]$name, latitude=-13.0, longitude=-55.0, start="2000-02", end="2006-04")</code>
 
