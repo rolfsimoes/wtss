@@ -32,7 +32,7 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 
 - Get the description of the second coverage <code>cv1 = describeCoverage(ts_server,coverages[2])</code>
 
-- Get a time series <code>ts = timeSeries(ts_server, names(cv1), cv1[[1]]$attributes$name, -45,-12,"2014-01-01","2014-12-31")</code>
+- Get a time series <code>ts = timeSeries(ts_server, names(cv1), cv1[[1]]$attributes$name, -45,-12,"2014-01","2014-12")</code>
 
 <b>NOTE:</b> For older R versions, it is also necessary to install the <i>digest</i> package.
  
