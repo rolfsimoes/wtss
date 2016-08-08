@@ -20,8 +20,10 @@ Imports:
     RCurl,
     jsonlite,
     testthat,
-    zoo,
-    lubridate
+    spacetime,
+    sp,
+    lubridate,
+    zoo
 License: LGPL-3 + file LICENSE
 RoxygenNote: 5.0.1
 URL: http://www.dpi.inpe.br/esensing

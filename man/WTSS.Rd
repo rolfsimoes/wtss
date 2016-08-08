@@ -12,7 +12,7 @@ WTSS(serverUrl)
 \item{serverUrl}{A server URL}
 }
 \description{
-Use this class for creating a connection to a Web Time-Series Service (WTSS)
+Use this class for creating a connection to a Web Time Series Service (WTSS)
 
 Creates a WTSS object
 }

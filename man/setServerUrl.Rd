@@ -13,7 +13,7 @@ setServerUrl(object, aServerUrl)
 \arguments{
 \item{object}{A WTSS object}
 
-\item{aServerUrl}{A character representing the server URL}
+\item{aServerUrl}{A character representing the server URL.}
 }
 \description{
 Sets the object's server URL

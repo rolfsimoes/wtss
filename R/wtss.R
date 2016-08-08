@@ -14,11 +14,13 @@
 #' @exportClass WTSS
 #' @author Victor Maus, Alber Sanchez, Luiz Fernando Assis, Pedro Andrade, Gilberto Ribeiro
 #' @import jsonlite
-#' @import lubridate
 #' @import methods
 #' @import RCurl
 #' @import roxygen2
 #' @import testthat
+#' @import spacetime
+#' @import sp
+#' @import lubridate
 #' @import zoo
 setClass (
   
@@ -289,11 +291,12 @@ setMethod("describeCoverage","WTSS",
 #' @docType methods
 #' @export
 #' @examples
-#' #obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
-#' #objlist = listCoverages(obj)
-#' #objdesc = describeCoverage(obj,objlist[2])
-#' #coordinates = list(c(-45,-12),  c(-54,-11))
-#' #tsList = listTimeSeries(obj, names(objdesc), objdesc[[1]]$name, coordinates, "2004-01", "2004-05")
+#' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+#' objlist = listCoverages(obj)
+#' objdesc = describeCoverage(obj,objlist[2])
+#' coordinates = list(c(-45,-12),  c(-54,-11))
+#' attributes = objdesc[[1]]$attributes$name
+#' tsList = listTimeSeries(obj, names(objdesc), attributes, coordinates, "2014-01", "2014-05")
 setGeneric("listTimeSeries",function(object,coverages,attributes,coordinates,start,end){standardGeneric("listTimeSeries")})
 
 #' @rdname  listTimeSeries
@@ -480,13 +483,20 @@ setMethod("timeSeries","WTSS",
   # if monthly date
   if(format == "%Y-%m")
       timeline = as.Date(as.yearmon(timeline))
-  else # if weekly date
+  else # if weekly or daily date
       if(format == "%Y-%m-%d")
         timeline = as.Date(timeline, format)
 
-  return(list(center_coordinate = data.frame(longitude=items$result$center_coordinate$longitude, latitude=items$result$center_coordinate$latitude), 
-               attributes = zoo(attributes.processed, timeline))
-  )
+  #return(list(center_coordinate = data.frame(longitude=items$result$center_coordinate$longitude, latitude=items$result$center_coordinate$latitude), 
+  #            attributes = zoo(attributes.processed, timeline)))
+  
+  # make sp points
+  sp <- cbind(x = items$result$center_coordinate$longitude, y = items$result$center_coordinate$latitude)
+  row.names(sp) = paste("point", 1:nrow(sp), sep="")
+  sp = SpatialPoints(sp)
+   
+  return(STFDF(sp, timeline, attributes.processed))
+  
 }
 
 .sendRequest <- function(request)

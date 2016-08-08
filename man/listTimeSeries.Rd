@@ -12,7 +12,7 @@ listTimeSeries(object, coverages, attributes, coordinates, start, end)
   start, end)
 }
 \arguments{
-\item{object}{Either a WTSS object or a server URL}
+\item{object}{Either a WTSS object or a server URL.}
 
 \item{coverages}{Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.}
 
@@ -28,10 +28,11 @@ listTimeSeries(object, coverages, attributes, coordinates, start, end)
 This function retrieves the time series for a list of coordinates.
 }
 \examples{
-#obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
-#objlist = listCoverages(obj)
-#objdesc = describeCoverage(obj,objlist[2])
-#coordinates = list(c(-45,-12),  c(-54,-11))
-#tsList = listTimeSeries(obj, names(objdesc), objdesc[[1]]$name, coordinates, "2004-01", "2004-05")
+obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+objlist = listCoverages(obj)
+objdesc = describeCoverage(obj,objlist[2])
+coordinates = list(c(-45,-12),  c(-54,-11))
+attributes = objdesc[[1]]$attributes$name
+tsList = listTimeSeries(obj, names(objdesc), attributes, coordinates, "2014-01", "2014-05")
 }
 
