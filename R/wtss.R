@@ -228,7 +228,7 @@ setMethod("listCoverages","WTSS",
 #' @export
 #' @examples
 #' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
-#' objdesc = describeCoverage(obj,"hotspot_monthly")
+#' objdesc = describeCoverage(obj,"hotspot_risk_monthly")
 setGeneric("describeCoverage",function(object,coverages){standardGeneric("describeCoverage")})
 
 
@@ -284,8 +284,8 @@ setMethod("describeCoverage","WTSS",
 #' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
 #' @param coordinates A list or data frame of longitude latitude coordinates in WGS84 coordinate system.
-#' @param start A character with the start date in the format yyyy-mm-dd.
-#' @param end A character with the end date in the format yyyy-mm-dd.
+#' @param start A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
+#' @param end A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
 #' @docType methods
 #' @export
 #' @examples
@@ -328,15 +328,15 @@ setMethod("listTimeSeries","WTSS",
 #' @param attributes A character vector of dataset names.
 #' @param longitude A longitude in WGS84 coordinate system.
 #' @param latitude A latitude in WGS84 coordinate system.
-#' @param start A character with the start date in the format yyyy-mm-dd.
-#' @param end A character with the end date in the format yyyy-mm-dd.
+#' @param start A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
+#' @param end A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
 #' @docType methods
 #' @export
 #' @examples
-#' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+#' obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
 #' objlist = listCoverages(obj)
-#' objdesc = describeCoverage(obj,objlist[2])
-#' ts = timeSeries(obj, names(objdesc), objdesc[[1]]$attributes$name, -45,-12,"2004-01","2004-05")
+#' objdesc = describeCoverage(obj,objlist[1])
+#' ts = timeSeries(obj, names(objdesc), "ndvi", -45,-12,"2000-02-18","2004-01-01")
 setGeneric("timeSeries",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("timeSeries")})
 
 #' @rdname  timeSeries

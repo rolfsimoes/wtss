@@ -20,9 +20,9 @@ listTimeSeries(object, coverages, attributes, coordinates, start, end)
 
 \item{coordinates}{A list or data frame of longitude latitude coordinates in WGS84 coordinate system.}
 
-\item{start}{A character with the start date in the format yyyy-mm-dd.}
+\item{start}{A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
 
-\item{end}{A character with the end date in the format yyyy-mm-dd.}
+\item{end}{A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
 }
 \description{
 This function retrieves the time series for a list of coordinates.

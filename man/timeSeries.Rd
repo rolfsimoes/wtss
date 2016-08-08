@@ -22,17 +22,17 @@ timeSeries(object, coverages, attributes, longitude, latitude, start, end)
 
 \item{latitude}{A latitude in WGS84 coordinate system.}
 
-\item{start}{A character with the start date in the format yyyy-mm-dd.}
+\item{start}{A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
 
-\item{end}{A character with the end date in the format yyyy-mm-dd.}
+\item{end}{A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
 }
 \description{
 This function retrieves the time series for a pair of coordinates.es
 }
 \examples{
-obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
 objlist = listCoverages(obj)
-objdesc = describeCoverage(obj,objlist[2])
-ts = timeSeries(obj, names(objdesc), objdesc[[1]]$attributes$name, -45,-12,"2004-01","2004-05")
+objdesc = describeCoverage(obj,objlist[1])
+ts = timeSeries(obj, names(objdesc), "ndvi", -45,-12,"2000-02-18","2004-01-01")
 }
 
