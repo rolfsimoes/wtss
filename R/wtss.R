@@ -1,6 +1,6 @@
 #' The WTSS class
 #'
-#' Use this class for creating a connection to a Web Time-Series Service (WTSS)
+#' Use this class for creating a connection to a Web Time Series Service (WTSS)
 #'   
 #'@section Slots :
 #' \describe{
@@ -159,7 +159,7 @@ setMethod("getServerUrl","WTSS",
 #' Sets the object's server URL
 #'
 #' @param object A WTSS object
-#' @param aServerUrl A character representing the server URL
+#' @param aServerUrl A character representing the server URL.
 #' @docType methods
 #' @export
 setGeneric("setServerUrl",function(object, aServerUrl){standardGeneric ("setServerUrl")})
@@ -280,7 +280,7 @@ setMethod("describeCoverage","WTSS",
 #'
 #' @description This function retrieves the time series for a list of coordinates.
 #'
-#' @param object Either a WTSS object or a server URL
+#' @param object Either a WTSS object or a server URL.
 #' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
 #' @param coordinates A list or data frame of longitude latitude coordinates in WGS84 coordinate system.
