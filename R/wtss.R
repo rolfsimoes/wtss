@@ -486,16 +486,113 @@ setMethod("timeSeries","WTSS",
   else # if weekly or daily date
       if(format == "%Y-%m-%d")
         timeline = as.Date(timeline, format)
-
-  #return(list(center_coordinate = data.frame(longitude=items$result$center_coordinate$longitude, latitude=items$result$center_coordinate$latitude), 
-  #            attributes = zoo(attributes.processed, timeline)))
   
-  # make sp points
-  sp <- cbind(x = items$result$center_coordinate$longitude, y = items$result$center_coordinate$latitude)
-  row.names(sp) = paste("point", 1:nrow(sp), sep="")
-  sp = SpatialPoints(sp)
-   
-  return(STFDF(sp, timeline, attributes.processed))
+  return(list(center_coordinate = data.frame(longitude=items$result$center_coordinate$longitude, latitude=items$result$center_coordinate$latitude), 
+              attributes = zoo(attributes.processed, timeline)))
+  
+}
+
+#' ts to STFDF
+#'
+#' @description This function coerce data from the time series into STFDF data
+#' 
+#' @param timeseries Time series.
+#' @docType methods
+#' @export
+#' @examples
+#' obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
+#' objlist = listCoverages(obj)
+#' objdesc = describeCoverage(obj,objlist[2])
+#' ts = timeSeries(chronos, names(cv), cv[[1]]$attributes$name, -55,-13,"2000-02-18","2001-01-01")
+#' stfdf <- as.STFDF(ts)
+setGeneric("as.STFDF",function(timeseries){standardGeneric("as.STFDF")})
+ 
+#' @rdname as.STFDF
+setMethod("as.STFDF","list",
+          function(timeseries)
+          {
+            .as.STFDF(timeseries)
+          }
+)
+
+.as.STFDF <- function(timeseries) 
+{
+  
+  if (length(index(timeseries[[1]]$attributes)) <= 1)
+    cat("It is not possible to coerce from data into STFDF.")
+  else
+  {
+     # STFDF return
+     return(STFDF(SpatialPoints(timeseries[[1]]$center_coordinate), index(timeseries[[1]]$attributes), data.frame(coredata(timeseries[[1]]$attributes))))
+   }
+  
+  return (NULL)
+ 
+}
+
+#' get Time Series by polygon
+#'
+#' @description This function coerce data from the time series into STFDF data
+#' 
+#' @param object Either a WTSS object or a server URL
+#' @param cv Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
+#' @param attributes A character vector of dataset names.
+#' @param polygon A polygon space.
+#' @param start A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
+#' @param end A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
+#' @docType methods
+#' @export
+setGeneric("polygonTimeSeries",function(object, cv, attributes, polygon, start, end){standardGeneric("polygonTimeSeries")})
+
+#' @rdname polygonTimeSeries
+setMethod("polygonTimeSeries","WTSS",
+          function(object, cv, attributes, polygon, start, end) 
+          {
+            .polygonTimeSeries(object, cv, attributes, polygon, start, end) 
+          }
+)
+
+.polygonTimeSeries <- function(object, cv, attributes, polygon, start, end) 
+{
+  
+  x <- c(cv[[1]]$geo_extent$spatial$extent$xmin, cv[[1]]$geo_extent$spatial$extent$xmax)
+  y <- c(cv[[1]]$geo_extent$spatial$extent$ymin, cv[[1]]$geo_extent$spatial$extent$ymax)
+  spatial_extent <- bbox(SpatialPoints(cbind(x,y)))
+  
+  spatial_resolution <- c(x = cv[[1]]$geo_extent$spatial$resolution$x, y = cv[[1]]$geo_extent$spatial$resolution$y)
+  
+  minimum_bb = bbox(polygon)
+  
+  intersect_spatial <- bbox(intersect(minimum_bb, spatial_extent))
+  
+  # left inferior boundary
+  lat_li = intersect_spatial[1]
+  lon_li = intersect_spatial[2]
+  lat_rs = intersect_spatial[3]
+  lon_rs = intersect_spatial[4]
+  
+  # center coordinates resolution
+  resolution = 0.05
+  
+  # initializing variables
+  list_coordinates <- list()
+  list_time_series <- list()
+  n_elem = 1
+  
+  for (i in seq(from=lat_li, to=lat_rs, by=resolution)) {
+    for (j in seq(from=lon_li, to=lon_rs, by=resolution)) {
+      ts = timeSeries(object, names(cv), attributes=attributes, latitude=i, longitude=j, start=start, end=end)
+      if (Position(function(x) identical(x, c(ts$MOD13Q1$center_coordinate$longitude,ts$MOD13Q1$center_coordinate$latitude)), list_coordinates, nomatch = 0) > 0) {
+        cat("longitude = ", ts[[1]]$center_coordinate$longitude, "latitude = ", ts$MOD13Q1$center_coordinate$latitude, "\n")
+        next
+      }
+      list_coordinates[[n_elem]] <- c(ts$MOD13Q1$center_coordinate$longitude,ts$MOD13Q1$center_coordinate$latitude)
+      list_time_series[[n_elem]] <- list(center_coordinates = c(ts$MOD13Q1$center_coordinate$longitude,ts$MOD13Q1$center_coordinate$latitude), values = ts$MOD13Q1$attributes$ndvi)
+      n_elem=n_elem+1
+    }
+  }
+  
+  return (list_time_series)
   
 }
 
