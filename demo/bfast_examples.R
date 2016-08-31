@@ -3,16 +3,16 @@ library(bfast)
 library(wtss.R)
 
 # create a connection using a serverUrl
-chronos = WTSS("http://www.dpi.inpe.br/tws/wtss")
+server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 
 # Get the list of coverages provided by the service
-coverages = listCoverages(chronos)
+coverages = listCoverages(server)
 
 # Get the description of the third coverage
-cv = describeCoverage(chronos,coverages[2])
+cv = describeCoverage(server,coverages[2])
 
 # Get a time series
-spatio_temporal = timeSeries(chronos, names(cv), attributes=cv[[names(cv)]]$attributes$name[1], latitude=-10.408, longitude=-53.495, start="2000-02-18", end="2016-01-01")
+spatio_temporal = timeSeries(server, names(cv), attributes=cv[[names(cv)]]$attributes$name[1], latitude=-10.408, longitude=-53.495, start="2000-02-18", end="2016-01-01")
 
 # plot the time-series in a zoo object
 plot(spatio_temporal[[names(cv)]]$attributes[,1])
