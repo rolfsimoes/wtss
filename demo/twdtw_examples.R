@@ -3,19 +3,19 @@ library(dtwSat)
 library(wtss.R)
 
 # create a connection using a serverUrl
-chronos = WTSS("http://www.dpi.inpe.br/tws/wtss")
+server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 
 # get the list of coverages provided by the service
-coverages = listCoverages(chronos)
+coverages = listCoverages(server)
 
 # get the description of the third coverage
-cv = describeCoverage(chronos,coverages[2])
+cv = describeCoverage(server, coverages[2])
 
 # define attributes list
 attr <- c("ndvi", "evi",  "red",  "nir",  "blue", "mir" )
 
 # get a time series
-spatio_temporal = timeSeries(chronos, names(cv), attributes=attr, latitude=-10.408, longitude=-53.495, start="2000-02-18", end="2016-01-01")
+spatio_temporal = timeSeries(server, names(cv), attributes=attr, latitude=-10.408, longitude=-53.495, start="2000-02-18", end="2016-01-01")
 
 # plot the time-series in a zoo object
 ts = twdtwTimeSeries(spatio_temporal[[names(spatio_temporal)]]$attributes)
