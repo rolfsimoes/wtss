@@ -17,10 +17,11 @@ as.STFDF(timeseries)
 This function coerce data from the time series into STFDF data
 }
 \examples{
-#obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
-#objlist = listCoverages(obj)
-#objdesc = describeCoverage(obj,objlist[1])
-#ts = timeSeries(obj, names(objdesc), "ndvi", -45,-12,"2000-02-18","2004-01-01")
-#stfdf <- as.STFDF(ts)
+chronos = WTSS("http://www.dpi.inpe.br/tws/wtss")
+coverages  = listCoverages(chronos)
+cv = describeCoverage(chronos, coverages[2])
+attributes = cv[[1]]$attributes$name[1] 
+ts = timeSeries(chronos, names(cv), attributes, -55,-13,"2000-02-18","2001-01-01")
+stfdf <- as.STFDF(ts)
 }
 

@@ -1,1 +1,2 @@
-bfast_examples     bfast demo using time series object from wtss
+bfast_examples     bfast demo using time series object from WTSS
+twdtw_examples     dtwsat demo using time series object from WTSS

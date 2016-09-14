@@ -195,6 +195,7 @@ setMethod("listCoverages","WTSS",
 {
   
   url <- getServerUrl(object)
+  
   items <- 0
   class(items) <- "try-error"
   ce <- 0
@@ -208,7 +209,9 @@ setMethod("listCoverages","WTSS",
     # try only 10 times (avoid time out connection)
     while(class(items) == "try-error" & ce < 10) 
     {
+    #  cat('parseJSON\n')
       items <- .parseJSON(.sendRequest(request))
+    #  cat('performed - parseJSON\n')
       ce <- ce + 1
     }
     
@@ -230,7 +233,7 @@ setMethod("listCoverages","WTSS",
 #' @export
 #' @examples
 #' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
-#' objdesc = describeCoverage(obj,"hotspot_risk_monthly")
+#' objdesc = describeCoverage(obj,listCoverages(obj)[1])
 setGeneric("describeCoverage",function(object,coverages){standardGeneric("describeCoverage")})
 
 
@@ -259,8 +262,8 @@ setMethod("describeCoverage","WTSS",
             
             # avoid time out connection 
             while(class(items) == "try-error" & ce < 10) {
-              items <- .parseJSON(.sendRequest(request))
-              ce <- ce + 1
+               items <- .parseJSON(.sendRequest(request))
+               ce <- ce + 1
             }
             
             # if the server does not answer any item
@@ -291,12 +294,12 @@ setMethod("describeCoverage","WTSS",
 #' @docType methods
 #' @export
 #' @examples
-#' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+#' obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
 #' objlist = listCoverages(obj)
 #' objdesc = describeCoverage(obj,objlist[2])
 #' coordinates = list(c(-45,-12),  c(-54,-11))
-#' attributes = objdesc[[1]]$attributes$name
-#' tsList = listTimeSeries(obj, names(objdesc), attributes, coordinates, "2014-01", "2014-05")
+#' attributes = objdesc[[1]]$attributes$name[1]
+#' tsList = listTimeSeries(obj, names(objdesc), attributes, coordinates, "2014-01-01", "2015-01-01")
 setGeneric("listTimeSeries",function(object,coverages,attributes,coordinates,start,end){standardGeneric("listTimeSeries")})
 
 #' @rdname  listTimeSeries
@@ -338,8 +341,9 @@ setMethod("listTimeSeries","WTSS",
 #' @examples
 #' obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
 #' objlist = listCoverages(obj)
-#' objdesc = describeCoverage(obj,objlist[1])
-#' ts = timeSeries(obj, names(objdesc), "ndvi", -45,-12,"2000-02-18","2004-01-01")
+#' objdesc = describeCoverage(obj,objlist[2])
+#' attributes = objdesc[[1]]$attributes$name[1]
+#' ts = timeSeries(obj, names(objdesc), attributes, -45,-12,"2000-02-18","2004-01-01")
 setGeneric("timeSeries",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("timeSeries")})
 
 #' @rdname  timeSeries
@@ -434,7 +438,7 @@ setMethod("timeSeries","WTSS",
             names(out) <- coverages
             
             return(out)
-        } 
+        }
         else 
         {
             stop("Missing either a list of coverages and attributes such as retrieved by describe_coverage()
@@ -500,10 +504,11 @@ setMethod("timeSeries","WTSS",
 #' @docType methods
 #' @export
 #' @examples
-#' obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
-#' objlist = listCoverages(obj)
-#' objdesc = describeCoverage(obj,objlist[2])
-#' ts = timeSeries(chronos, names(cv), cv[[1]]$attributes$name, -55,-13,"2000-02-18","2001-01-01")
+#' chronos = WTSS("http://www.dpi.inpe.br/tws/wtss")
+#' coverages  = listCoverages(chronos)
+#' cv = describeCoverage(chronos, coverages[2])
+#' attributes = cv[[1]]$attributes$name[1] 
+#' ts = timeSeries(chronos, names(cv), attributes, -55,-13,"2000-02-18","2001-01-01")
 #' stfdf <- as.STFDF(ts)
 setGeneric("as.STFDF",function(timeseries){standardGeneric("as.STFDF")})
  
@@ -599,32 +604,28 @@ setMethod("polygonTimeSeries","WTSS",
 .sendRequest <- function(request)
 {
   
-  # check if URL exists
-  if (url.exists(request))
-    response <- getURL(request)
-  else
-  {
-    # no valid http page error handling
-    response <- "ERROR: Request to the web time series service failed. The URL server may be incorrect or the service does not exist."
-    class(response) <- "try-error"
-  }
-
-    return(response)
+  # check if URL exists and perform the request
+  tryCatch(response <- getURL(request), 
+           error = function(e) {
+              e$message <- paste("HTTP request failed. The URL server may be incorrect or the time series service does not exist."); 
+              stop(e);
+           })
+  
+  return(response)
       
 }
 
 .parseJSON <- function(response)
 {
-  
   # validate json
   if (validate(response))
     json_response <- fromJSON(response)
   else
   {
     # no json returned error handling
-    json_response <- toJSON("ERROR: Request to the web time series service failed. The service may be down!")
+    json_response <- toJSON("ERROR: Request to the web time series service failed!")
     class(json_response) <- "try-error"
   }
-
+  
   return(json_response)
 }
