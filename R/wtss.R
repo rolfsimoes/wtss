@@ -209,9 +209,7 @@ setMethod("listCoverages","WTSS",
     # try only 10 times (avoid time out connection)
     while(class(items) == "try-error" & ce < 10) 
     {
-    #  cat('parseJSON\n')
       items <- .parseJSON(.sendRequest(request))
-    #  cat('performed - parseJSON\n')
       ce <- ce + 1
     }
     
@@ -379,8 +377,6 @@ setMethod("timeSeries","WTSS",
       
       out <- lapply(names(coverages), function(cov)
              {
-                #attributes <- coverages[[cov]]
-                
                 request <- paste(url,"time_series?coverage=",cov,"&attributes=",paste(attributes, collapse=","),
                                  "&latitude=",latitude,"&longitude=",longitude,
                                  "&start=",start,"&end=",end,sep="")
@@ -388,7 +384,7 @@ setMethod("timeSeries","WTSS",
                 # try only 10 times (avoid time out connection)
                 while(class(items) == "try-error" & ce < 10) 
                 {
-                  items <- .parseJSON(.sendRequest(request))#items <- try(fromJSON(try(getURL(request))))
+                  items <- .parseJSON(.sendRequest(request))
                   ce <- ce + 1
                 }
                 
@@ -485,10 +481,10 @@ setMethod("timeSeries","WTSS",
   format <- guess_formats(timeline[1], c("%Y-%m-%d", "%Y-%m"))
   
   # if monthly date
-  if(format == "%Y-%m")
+  if(any(format == "%Y-%m"))
       timeline = as.Date(as.yearmon(timeline))
   else # if weekly or daily date
-      if(format == "%Y-%m-%d")
+      if(any(format == "%Y-%m-%d"))
         timeline = as.Date(timeline, format)
   
   return(list(center_coordinate = data.frame(longitude=items$result$center_coordinate$longitude, latitude=items$result$center_coordinate$latitude), 
