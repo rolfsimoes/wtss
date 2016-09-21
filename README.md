@@ -36,7 +36,7 @@ plot(ts[[1]]$attributes[,1], main="Pixel Center Coordinates Time-Series (-10.408
 <p class="caption">
 Figure 1 - Vegetation index (ts time series).
 </p>
-<center>
+</center>
 
 ## References
 
