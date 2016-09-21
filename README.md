@@ -31,12 +31,12 @@ ts = timeSeries(ts_server, names(cv), cv[[1]]$attributes$name, latitude=-10.408,
 plot(ts[[1]]$attributes[,1], main="Pixel Center Coordinates Time-Series (-10.408, -53.495)", xlab="Time", ylab="Normalized Difference Vegetation Index")
 ```
 
-<div id="wrapper" style="width:100%; text-align:center">
+<p align="center">
 <img src="images/plot-ts-timeseries.png" alt="Figure 1 - Vegetation index (ts time series)."  />
 <p class="caption">
 Figure 1 - Vegetation index (ts time series).
 </p>
-</div>
+</p>
 
 ## References
 
