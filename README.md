@@ -4,54 +4,47 @@
 
 This R Client API is based on the orginal version developed by Alber Sanchez at https://github.com/albhasan/rwtss.
 
-## Prerequisites
+## Getting started
 
-- **<a href="http://git-scm.com/">Git</a>:** For acessing the source code.
+Installing and loading wtss.R package
 
-- **<a href="http://www.r-project.org/">R</a>:** For building and using the wtss.R package.
+<code>
 
-- **<a href="https://www.latex-project.org/">Latex</a>:** For including features for the production of vignettes.
+# Install and load the packages 
+devtools::install_github("luizassis/wtss.R")
+library(wtss.R)
 
-- **<a href="http://www.rstudio.com/">Rstudio</a>:** suggestion of IDE to be used as the development environment.
+</code>
 
-## Using the wtss.R Package
+A simple example
 
-- Open RStudio
+<code>
 
-- Install devtools <code>install.packages("devtools")</code>
- 
-- Load devtools <code>library(devtools)</code>
+# create a connection 
+ts_server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 
-- Install the wtss.R package <code>install_github("luizassis/wtss.R")</code>
+# get the list of coverages provided by the service 
+coverages = listCoverages(ts_server)
 
-- Load the wtss.R package <code>library(wtss.R)</code>
+# get the description of the second coverage 
+cv = describeCoverage(ts_server,coverages[2])
 
-- Create a connection <code>ts_server = WTSS("http://www.dpi.inpe.br/ts/wtss")</code>
+# get a time series 
+ts = timeSeries(ts_server, names(cv), cv[[1]]$attributes$name, latitude=-10.408, longitude=-53.495, start="2000-02-18", end="2016-01-01")
 
-- Get the list of coverages provided by the service <code>coverages = listCoverages(ts_server)</code>
+plot(ts[[1]]$attributes[,1], main="Pixel Center Coordinates Time-Series (-10.408, -53.495)", xlab="Time", ylab="Normalized Difference Vegetation Index")
 
-- Get the description of the second coverage <code>cv1 = describeCoverage(ts_server,coverages[2])</code>
+</code>
 
-- Get a time series <code>ts = timeSeries(ts_server, names(cv1), cv1[[1]]$attributes$name, -45,-12,"2014-01","2014-12")</code>
+<img src="figure/plot-ts-timeseries.png" alt="Figure 1 - Vegetation index (ts time series)."  />
+<p class="caption">
+Figure 1 - Vegetation index (ts time series).
+</p>
 
-<b>NOTE:</b> For older R versions, it is also necessary to install the <i>digest</i> package.
- 
-## Building Instructions
+## References
 
-- Clone the project: <code>git clone https//github.com/luizassis/wtss.R.git</code>.
-
-- Open Rstudio, go to File - Open Project and pick the file <code>wtss.R.Rproj</code>.
-
-- Install the required packages <code>install.packages(c("roxygen2", "testthat"))</code>.
-
-- Go to the <i>Build</i> tab in the upper-right panel and press the button <i>Build & Reload</i>. After this the package is ready to use.
-
-- You can also create a source package: Go to the <i>Build</i> tab, display the menu <i>More</i> and select the option <i>Build Source Package</i>.
-
+G. R. d. Queiroz, K. R. Ferreira, L. Vinhas,G. Camara, R. W. d. Costa, R. C. M. d. Souza, V. W.Maus, and A. Sanchez. WTSS: um serviço web para extração de séries temporais de imagens de sensoriamento remoto. In Proceeding of the XVII Remote Sensing Brazilian Symposium, pages 7553-7560, 2015.
 
 ## Reporting Bugs
 
 Any problem should be reported to luizffga@dpi.inpe.br.
-
-
-<!--For more information on wtss.R, please, visit its main web page at: http://www.dpi.inpe.br/esensing.-->
