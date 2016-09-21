@@ -9,19 +9,14 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 Installing and loading wtss.R package
 
 ``` r
-
-# Install and load the packages 
 devtools::install_github("luizassis/wtss.R")
-
 library(wtss.R)
-
 ```
 
 A simple example
 
 ``` r
-
-# create a connection 
+# create a WTSS connection 
 ts_server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 
 # get the list of coverages provided by the service 
@@ -34,13 +29,14 @@ cv = describeCoverage(ts_server,coverages[2])
 ts = timeSeries(ts_server, names(cv), cv[[1]]$attributes$name, latitude=-10.408, longitude=-53.495, start="2000-02-18", end="2016-01-01")
 
 plot(ts[[1]]$attributes[,1], main="Pixel Center Coordinates Time-Series (-10.408, -53.495)", xlab="Time", ylab="Normalized Difference Vegetation Index")
-
 ```
 
+<center>
 <img src="images/plot-ts-timeseries.png" alt="Figure 1 - Vegetation index (ts time series)."  />
 <p class="caption">
 Figure 1 - Vegetation index (ts time series).
 </p>
+<center>
 
 ## References
 
