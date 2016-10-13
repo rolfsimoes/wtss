@@ -22,7 +22,7 @@
 #' @import sp
 #' @import lubridate
 #' @import zoo
-setClass (
+setClass(
   
   # Set the name for the class
   Class = "WTSS",
@@ -37,57 +37,54 @@ setClass (
   prototype=list(),
   
   # Test if the data is consistent. Only called if no initialize function is defined.
-  validity = function(object)
-  {
-    if(length(object@serverUrl) != 1){
+  validity = function(object) {
+    
+    if(length(object@serverUrl) != 1) {
       stop ("[WTSS: validation] Invalid server URL.")
     }
     
-    if(nchar(object@serverUrl) <= 1){
+    if(nchar(object@serverUrl) <= 1) {
       stop ("[WTSS: validation] Invalid server URL.")
     }
-    
-#     if(length(object@exploreArrays) <= 1){
-#       stop ("[WTSS: validation] Invalid server URL.")
-#     }
-#     
-#     cat("nchar(object@exploreArrays = ",nchar(object@exploreArrays))
-#     if(nchar(object@exploreArrays) <= 1){
-#       stop ("[WTSS: validation] Invalid server URL.")
-#     }
     
     return(TRUE)
+    
   }
+  
 )
 
 #*******************************************************
 #CONSTRUCTOR
 #*******************************************************
-setMethod (
+setMethod(
   
   # initialize function
-  f="initialize",
+  f = "initialize",
   
   # Method signature
-  signature="WTSS",
+  signature = "WTSS",
   
   # Function definition
-  definition=function(.Object, serverUrl)
-  {
+  definition = function(.Object, serverUrl) {
     
-    if(!missing(serverUrl))
-    {
+    # check whether the url is missing or not
+    if(!missing(serverUrl)) {
+      
       .Object@serverUrl <- serverUrl
       arrays <- .listCoverages(.Object)
-       if(class(arrays) == "try-error")
-         stop(arrays)
-       else
-       .Object@listCoverages <- arrays
-      #.Object@exploreArrays <- .listCoverages(.Object)
+      
+      if(class(arrays) == "try-error")
+        stop(arrays)
+      else
+        .Object@listCoverages <- arrays
+      
       validObject(.Object)
-    }else{
+      
+    }
+    else {
       .Object@serverUrl <- character(0)
     }
+    
     return(.Object)
   }
 )
@@ -100,15 +97,16 @@ setMethod (
 #' @export
 #' @examples
 #' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
-WTSS <- function(serverUrl)
-{
+WTSS <- function(serverUrl) {
+  
   new (Class="WTSS",serverUrl = serverUrl)
+  
 }
 
 #*******************************************************
 #SHOW
 #*******************************************************
-setMethod (
+setMethod(
   
   # Name of the function
   f = "show", 
@@ -117,8 +115,7 @@ setMethod (
   signature = "WTSS", 
   
   # Stylish print of the objects
-  definition=function(object)
-  {
+  definition = function(object) {
     
     # initial message
     cat(paste("Object of Class WTSS\n\n"))
@@ -133,6 +130,7 @@ setMethod (
     return(invisible())
   }
 )
+
 setGeneric(name="show", def=function(object){standardGeneric("show")})
 
 #*******************************************************
@@ -149,14 +147,14 @@ setGeneric(name="show", def=function(object){standardGeneric("show")})
 setGeneric("getServerUrl",function(object){standardGeneric ("getServerUrl")})
 
 #' @rdname getServerUrl
-setMethod("getServerUrl","WTSS",
-          function(object)
-          {
-            if(substr(object@serverUrl,nchar(object@serverUrl),nchar(object@serverUrl))!="/")
-              return(paste(object@serverUrl,"/",sep=""))
-            return(object@serverUrl)
-          }
-)
+setMethod("getServerUrl","WTSS", function(object) {
+  
+  if(substr(object@serverUrl,nchar(object@serverUrl),nchar(object@serverUrl))!="/")
+    return(paste(object@serverUrl,"/",sep=""))
+  
+  return(object@serverUrl)
+  
+})
 
 #' Sets the object's server URL
 #'
@@ -167,11 +165,11 @@ setMethod("getServerUrl","WTSS",
 setGeneric("setServerUrl",function(object, aServerUrl){standardGeneric ("setServerUrl")})
 
 #' @rdname  setServerUrl
-setMethod("setServerUrl","WTSS",
-          function(object, aServerUrl){
-            object@serverUrl <- aServerUrl
-          }
-)
+setMethod("setServerUrl","WTSS", function(object, aServerUrl) {
+  
+  object@serverUrl <- aServerUrl
+  
+})
 
 #' List coverages 
 #'
@@ -184,31 +182,26 @@ setMethod("setServerUrl","WTSS",
 setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
 
 #' @rdname  listCoverages
-setMethod("listCoverages","WTSS",
-          function(object)
-          {
-            .listCoverages(object) 
-          }
-)
+setMethod("listCoverages","WTSS", function(object) {
+  
+  .listCoverages(object) 
+  
+})
 
-.listCoverages <- function(object)
-{
+.listCoverages <- function(object) {
   
   url <- getServerUrl(object)
-  
   items <- 0
   class(items) <- "try-error"
   ce <- 0
   
-  if (length(url) == 1 && nchar(url) > 1)
-  {
+  if (length(url) == 1 && nchar(url) > 1) {
     
     # concat list_coverages to the service URL 
     request <- paste(url,"list_coverages",sep="")
     
     # try only 10 times (avoid time out connection)
-    while(class(items) == "try-error" & ce < 10) 
-    {
+    while(class(items) == "try-error" & ce < 10) {
       items <- .parseJSON(.sendRequest(request))
       ce <- ce + 1
     }
@@ -236,40 +229,36 @@ setGeneric("describeCoverage",function(object,coverages){standardGeneric("descri
 
 
 #' @rdname  describeCoverage
-setMethod("describeCoverage","WTSS",
-          function(object,coverages){
-            .describeCoverage(object,coverages) 
-          }
-)
+setMethod("describeCoverage","WTSS", function(object,coverages) {
+  .describeCoverage(object,coverages) 
+})
 
-.describeCoverage <- function(object,coverages)
-{
+.describeCoverage <- function(object,coverages) {
   
   url <- getServerUrl(object)
   items <- 0
   class(items) <- "try-error"
   ce <- 0
   
-  if(length(url) == 1 && nchar(url) > 1)
-  {
-    out <- lapply(coverages, function(cov)
-          {
+  if(length(url) == 1 && nchar(url) > 1) {
+    
+    out <- lapply(coverages, function(cov) {
         
-            # concat describe_coverage according to a name into the service URL 
-            request <- paste(url,"describe_coverage?name=", cov, sep="")
-            
-            # avoid time out connection 
-            while(class(items) == "try-error" & ce < 10) {
-               items <- .parseJSON(.sendRequest(request))
-               ce <- ce + 1
-            }
-            
-            # if the server does not answer any item
-            if (class(items) == "try-error")
-              return(items)
-            
-            return(items)
-        })
+        # concat describe_coverage according to a name into the service URL 
+        request <- paste(url,"describe_coverage?name=", cov, sep="")
+        
+        # avoid time out connection 
+        while(class(items) == "try-error" & ce < 10) {
+           items <- .parseJSON(.sendRequest(request))
+           ce <- ce + 1
+        }
+        
+        # if the server does not answer any item
+        if (class(items) == "try-error")
+          return(items)
+        
+        return(items)
+    })
     
     names(out) <- coverages
     
@@ -301,27 +290,24 @@ setMethod("describeCoverage","WTSS",
 setGeneric("listTimeSeries",function(object,coverages,attributes,coordinates,start,end){standardGeneric("listTimeSeries")})
 
 #' @rdname  listTimeSeries
-setMethod("listTimeSeries","WTSS",
-          function(object,coverages,attributes,coordinates,start,end)
-          {
-            # check type of the list of coordinates 
-            if( is.data.frame(coordinates) | is.matrix(coordinates))
-              coordinates <- lapply(1:dim(coordinates)[1], function(i) coordinates[i,])
-            
-            if(!is.list(coordinates))
-              stop("Missing a list. Please insert a list of longitude latitude coordinates in WGS84 coordinate system.")
-            
-            out <- lapply(coordinates, function(coords)
-            {
-              longitude <- coords[1]
-              latitude <- coords[2]
-              items <- .timeSeries(object,coverages,attributes,longitude,latitude,start,end)
-            })
-            
-            return(out)
-            
-          }
-)
+setMethod("listTimeSeries","WTSS", function(object,coverages,attributes,coordinates,start,end) {
+  
+  # check type of the list of coordinates 
+  if( is.data.frame(coordinates) | is.matrix(coordinates))
+    coordinates <- lapply(1:dim(coordinates)[1], function(i) coordinates[i,])
+  
+  if(!is.list(coordinates))
+    stop("Missing a list. Please insert a list of longitude latitude coordinates in WGS84 coordinate system.")
+  
+  out <- lapply(coordinates, function(coords) {
+    longitude <- coords[1]
+    latitude <- coords[2]
+    items <- .timeSeries(object,coverages,attributes,longitude,latitude,start,end)
+  })
+  
+  return(out)
+  
+})
 
 #' Get time series
 #'
@@ -345,17 +331,13 @@ setMethod("listTimeSeries","WTSS",
 setGeneric("timeSeries",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("timeSeries")})
 
 #' @rdname  timeSeries
-setMethod("timeSeries","WTSS",
-          function(object,coverages,attributes,longitude,latitude,start,end)
-          {
-          
-            .timeSeries(object,coverages,attributes,longitude,latitude,start,end)
-            
-          }
-)
+setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,latitude,start,end) {
+  
+  .timeSeries(object,coverages,attributes,longitude,latitude,start,end)
+  
+})
 
-.timeSeries <- function(object,coverages,attributes,longitude,latitude,start,end)
-{
+.timeSeries <- function(object,coverages,attributes,longitude,latitude,start,end) {
   
   if(missing(object))
     stop("Missing either a WTSS object or a server URL.")
@@ -369,38 +351,34 @@ setMethod("timeSeries","WTSS",
   if(class(object)=="WTSS")
     url <- getServerUrl(object)
   
-  if(length(url) == 1 && nchar(url) > 1)
-  {
+  if(length(url) == 1 && nchar(url) > 1) {
     
-    if(is.list(coverages))
-    {
+    if(is.list(coverages)) {
       
-      out <- lapply(names(coverages), function(cov)
-             {
-                request <- paste(url,"time_series?coverage=",cov,"&attributes=",paste(attributes, collapse=","),
-                                 "&latitude=",latitude,"&longitude=",longitude,
-                                 "&start=",start,"&end=",end,sep="")
-                
-                # try only 10 times (avoid time out connection)
-                while(class(items) == "try-error" & ce < 10) 
-                {
-                  items <- .parseJSON(.sendRequest(request))
-                  ce <- ce + 1
-                }
-                
-                # if the server does not answer any item
-                if (class(items) == "try-error")
-                {
-                  stop("\n Server connection timeout. Verify the URL or try again later.")
-                  return(items)
-                }
-                
-                # time series processing method call 
-                timeseries <- .timeSeriesProcessing(items)
-                
-                return(timeseries)
-                
-              })
+      out <- lapply(names(coverages), function(cov) {
+        
+        request <- paste(url,"time_series?coverage=",cov,"&attributes=",paste(attributes, collapse=","),
+                         "&latitude=",latitude,"&longitude=",longitude,
+                         "&start=",start,"&end=",end,sep="")
+        
+        # try only 10 times (avoid time out connection)
+        while(class(items) == "try-error" & ce < 10) {
+          items <- .parseJSON(.sendRequest(request))
+          ce <- ce + 1
+        }
+        
+        # if the server does not answer any item
+        if (class(items) == "try-error") {
+          stop("\n Server connection timeout. Verify the URL or try again later.")
+          return(items)
+        }
+        
+        # time series processing method call 
+        timeseries <- .timeSeriesProcessing(items)
+        
+        return(timeseries)
+        
+      })
       
       names(out) <- names(coverages)
       
@@ -408,23 +386,20 @@ setMethod("timeSeries","WTSS",
       
     } 
     else 
-        if( is.character(coverages) && length(coverages)==1 && is.character(attributes)) 
-        {
+        if(is.character(coverages) && length(coverages)==1 && is.character(attributes)) {
           
             request <- paste(url,"time_series?coverage=",coverages,"&attributes=",paste(attributes, collapse=","),
                              "&latitude=",latitude,"&longitude=",longitude,
                              "&start=",start,"&end=",end,sep="")
             
             # try only 10 times (avoid time out connection)
-            while(class(items) == "try-error" & ce < 10) 
-            {
+            while(class(items) == "try-error" & ce < 10) {
               items <- .parseJSON(.sendRequest(request))
               ce <- ce + 1
             }
       
             # if the server does not answer any item
-            if (class(items) == "try-error")
-            {
+            if (class(items) == "try-error") {
               stop("\n Server connection timeout. Verify the URL or try again later.")
               return(items)
             }
@@ -435,8 +410,7 @@ setMethod("timeSeries","WTSS",
             
             return(out)
         }
-        else 
-        {
+        else {
             stop("Missing either a list of coverages and attributes such as retrieved by describe_coverage()
            or a character with the coverage name and a character vector of dataset names.")
         }
@@ -446,31 +420,23 @@ setMethod("timeSeries","WTSS",
   
 }
 
-.timeSeriesProcessing <- function(items)
-{
+.timeSeriesProcessing <- function(items) {
+  
   attributes_list <- list(items$result$attributes)
   
-  attributes.processed <- lapply(attributes_list, function(subdataset)
-                          {
-                              # assign attribute values 
-                              value <- subdataset$values
-                              
-                              # assign corresponding missing values to the values vector
-                              #value[value==subdataset$missing_value] <- NA
-                              
-                              # if scale factor (e.g., 10000) is not null, it is necessary to divide by it
-                              #if( !is.null(subdataset$scale_factor) )
-                              #  value <- value / as.numeric(subdataset$scale_factor)
-                              
-                              # assign values to dataframe
-                              value <- data.frame(value, stringsAsFactors = FALSE)
-                              
-                              # dataset names to the values vectors 
-                              names(value) <- subdataset$attribute
+  attributes.processed <- lapply(attributes_list, function(subdataset) {
+      # assign attribute values 
+      value <- subdataset$values
+      
+      # assign values to dataframe
+      value <- data.frame(value, stringsAsFactors = FALSE)
+      
+      # dataset names to the values vectors 
+      names(value) <- subdataset$attribute
 
-                              return(value)
-                              
-                          })
+      return(value)
+      
+  })
   
   attributes.processed <- data.frame(attributes.processed, stringsAsFactors = FALSE)
   
@@ -506,26 +472,22 @@ setMethod("timeSeries","WTSS",
 #' attributes = cv[[1]]$attributes$name[1] 
 #' ts = timeSeries(chronos, names(cv), attributes, -55,-13,"2000-02-18","2001-01-01")
 #' stfdf <- as.STFDF(ts)
-setGeneric("as.STFDF",function(timeseries){standardGeneric("as.STFDF")})
+setGeneric("as.STFDF", function(timeseries){standardGeneric("as.STFDF")})
  
 #' @rdname as.STFDF
-setMethod("as.STFDF","list",
-          function(timeseries)
-          {
-            .as.STFDF(timeseries)
-          }
-)
+setMethod("as.STFDF","list", function(timeseries) {
+  .as.STFDF(timeseries)
+})
 
 .as.STFDF <- function(timeseries) 
 {
   
   if (length(index(timeseries[[1]]$attributes)) <= 1)
     cat("It is not possible to coerce from data into STFDF.")
-  else
-  {
+  else {
      # STFDF return
      return(STFDF(SpatialPoints(timeseries[[1]]$center_coordinate), index(timeseries[[1]]$attributes), data.frame(coredata(timeseries[[1]]$attributes))))
-   }
+  }
   
   return (NULL)
  
@@ -533,28 +495,27 @@ setMethod("as.STFDF","list",
 
 #' get Time Series by polygon
 #'
-#' @description This function coerce data from the time series into STFDF data
+#' @description This function retrieves the time series from a polygon area
 #' 
 #' @param object Either a WTSS object or a server URL
 #' @param cv Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
-#' @param polygon A polygon space.
+#' @param polygon A polygon area.
 #' @param start A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
 #' @param end A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
 #' @docType methods
 #' @export
-setGeneric("polygonTimeSeries",function(object, cv, attributes, polygon, start, end){standardGeneric("polygonTimeSeries")})
+setGeneric("polygonTimeSeries", function(object, cv, attributes, polygon, start, end){standardGeneric("polygonTimeSeries")})
 
 #' @rdname polygonTimeSeries
-setMethod("polygonTimeSeries","WTSS",
-          function(object, cv, attributes, polygon, start, end) 
-          {
-            .polygonTimeSeries(object, cv, attributes, polygon, start, end) 
-          }
-)
+setMethod("polygonTimeSeries","WTSS", function(object, cv, attributes, polygon, start, end) {
+  
+  .polygonTimeSeries(object, cv, attributes, polygon, start, end) 
+  
+})
 
-.polygonTimeSeries <- function(object, cv, attributes, polygon, start, end) 
-{
+.polygonTimeSeries <- function(object, cv, attributes, polygon, start, end) {
+  
   
   x <- c(cv[[1]]$geo_extent$spatial$extent$xmin, cv[[1]]$geo_extent$spatial$extent$xmax)
   y <- c(cv[[1]]$geo_extent$spatial$extent$ymin, cv[[1]]$geo_extent$spatial$extent$ymax)
@@ -583,8 +544,8 @@ setMethod("polygonTimeSeries","WTSS",
   for (i in seq(from=lat_li, to=lat_rs, by=resolution)) {
     for (j in seq(from=lon_li, to=lon_rs, by=resolution)) {
       ts = timeSeries(object, names(cv), attributes=attributes, latitude=i, longitude=j, start=start, end=end)
-      if (Position(function(x) identical(x, c(ts$MOD13Q1$center_coordinate$longitude,ts$MOD13Q1$center_coordinate$latitude)), list_coordinates, nomatch = 0) > 0) {
-        cat("longitude = ", ts[[1]]$center_coordinate$longitude, "latitude = ", ts$MOD13Q1$center_coordinate$latitude, "\n")
+      if (Position(function(x) identical(x, c(ts[[1]]$center_coordinate$longitude,ts[[1]]$center_coordinate$latitude)), list_coordinates, nomatch = 0) > 0) {
+        cat("longitude = ", ts[[1]]$center_coordinate$longitude, "latitude = ", ts[[1]]$center_coordinate$latitude, "\n")
         next
       }
       list_coordinates[[n_elem]] <- c(ts$MOD13Q1$center_coordinate$longitude,ts$MOD13Q1$center_coordinate$latitude)
@@ -597,31 +558,29 @@ setMethod("polygonTimeSeries","WTSS",
   
 }
 
-.sendRequest <- function(request)
-{
+.sendRequest <- function(request) {
   
   # check if URL exists and perform the request
-  tryCatch(response <- getURL(request), 
-           error = function(e) {
-              e$message <- paste("HTTP request failed. The URL server may be incorrect or the time series service does not exist."); 
-              stop(e);
-           })
+  tryCatch(response <- getURL(request), error = function(e) {
+    e$message <- paste("HTTP request failed. The URL server may be incorrect or the time series service does not exist."); 
+    stop(e);
+  })
   
   return(response)
       
 }
 
-.parseJSON <- function(response)
-{
+.parseJSON <- function(response) {
+  
   # validate json
   if (validate(response))
     json_response <- fromJSON(response)
-  else
-  {
+  else {
     # no json returned error handling
     json_response <- toJSON("ERROR: Request to the web time series service failed!")
     class(json_response) <- "try-error"
   }
   
   return(json_response)
+  
 }
