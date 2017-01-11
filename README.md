@@ -40,7 +40,7 @@ Figure 1 - Vegetation index (ts time series).
 
 ## References
 
-G. R. d. Queiroz, K. R. Ferreira, L. Vinhas,G. Camara, R. W. d. Costa, R. C. M. d. Souza, V. W.Maus, and A. Sanchez. WTSS: um serviço web para extração de séries temporais de imagens de sensoriamento remoto. In Proceeding of the XVII Remote Sensing Brazilian Symposium, pages 7553-7560, 2015.
+G. R. de Queiroz, K. R. Ferreira, L. Vinhas, G. Camara, R. W. da Costa, R. C. M. de Souza, V. W. Maus, and A. Sanchez. WTSS: um serviço web para extração de séries temporais de imagens de sensoriamento remoto. In Proceeding of the XVII Remote Sensing Brazilian Symposium, pages 7553-7560, 2015.
 
 ## Reporting Bugs
 
