@@ -28,7 +28,7 @@ cv = describeCoverage(ts_server,coverages[2])
 # get a time series 
 ts = timeSeries(ts_server, names(cv), cv[[1]]$attributes$name, latitude=-10.408, longitude=-53.495, start="2000-02-18", end="2016-01-01")
 
-plot(ts[[1]]$attributes[,1], main="Pixel Center Coordinates Time-Series (-10.408, -53.495)", xlab="Time", ylab="Normalized Difference Vegetation Index")
+plot(ts[[1]]$attributes[,1], main=sprintf("Pixel Center Coordinates Time-Series (%5.3f, %5.3f)", ts[[1]]$center_coordinate$latitude, ts[[1]]$center_coordinate$longitude), xlab="Time", ylab="Normalized Difference Vegetation Index")
 ```
 
 <p align="center">
