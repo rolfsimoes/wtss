@@ -3,16 +3,16 @@
 \docType{methods}
 \name{getServerUrl}
 \alias{getServerUrl}
-\alias{getServerUrl,wtss-method}
+\alias{getServerUrl,WTSS-method}
 \alias{getServerUrl-generic}
 \title{Returns the object's server URL}
 \usage{
 getServerUrl(object)
 
-\S4method{getServerUrl}{wtss}(object)
+\S4method{getServerUrl}{WTSS}(object)
 }
 \arguments{
-\item{object}{A wtss object}
+\item{object}{A WTSS object}
 }
 \description{
 Returns the object's server URL

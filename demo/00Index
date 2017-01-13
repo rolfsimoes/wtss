@@ -1,1 +1,7 @@
-bfast_examples     bfast demo using time series object from wtss
+bcpa_example              bcpa demo using time series object from WTSS
+bfast_example             bfast demo using time series object from WTSS
+breakoutdetection_example breakoutdetection demo using time series object from WTSS
+dtwsat_example            dtwsat demo using time series object from WTSS
+changepoint_example       changepoint demo using time series object from WTSS
+strucchange_example       strucchange demo using time series object from WTSS
+

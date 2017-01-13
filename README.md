@@ -1,57 +1,47 @@
 # R Client API for Web Time Series Service
 
-**wtss.R** is a free and open source R client package for handling Web Time-Series Service (WTSS) in the client side. For more information on WTSS see  [its specification and documentation in the TWS site](https://github.com/e-sensing/tws). 
+**wtss.R** is an R client package for handling Web Time-Series Service (WTSS) in the client side. For more information on WTSS see  its specification and documentation in the TWS [site](https://github.com/e-sensing/tws). 
 
 This R Client API is based on the orginal version developed by Alber Sanchez at https://github.com/albhasan/rwtss.
 
-## Prerequisites
+## Getting started
 
-- **<a href="http://git-scm.com/">Git</a>:** For acessing the source code.
+Installing and loading wtss.R package
 
-- **<a href="http://www.r-project.org/">R</a>:** For building and using the wtss.R package.
+``` r
+devtools::install_github("luizassis/wtss.R")
+library(wtss.R)
+```
 
-- **<a href="https://www.latex-project.org/">Latex</a>:** For including features for the production of vignettes.
+A simple example
 
-- **<a href="http://www.rstudio.com/">Rstudio</a>:** suggestion of IDE to be used as the development environment.
+``` r
+# create a WTSS connection 
+ts_server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 
-## Using the wtss.R Package
+# get the list of coverages provided by the service 
+coverages = listCoverages(ts_server)
 
-- Open RStudio
+# get the description of the second coverage 
+cv = describeCoverage(ts_server,coverages[2])
 
-- Install devtools <code>install.packages("devtools")</code>
- 
-- Load devtools <code>library(devtools)</code>
+# get a time series 
+ts = timeSeries(ts_server, names(cv), cv[[1]]$attributes$name, latitude=-10.408, longitude=-53.495, start="2000-02-18", end="2016-01-01")
 
-- Install the wtss.R package <code>install_github("e-sensing/wtss.R")</code>
+plot(ts[[1]]$attributes[,1], main=sprintf("Pixel Center Coordinates Time-Series (%5.3f, %5.3f)", ts[[1]]$center_coordinate$latitude, ts[[1]]$center_coordinate$longitude), xlab="Time", ylab="Normalized Difference Vegetation Index")
+```
 
-- Load the wtss.R package <code>library(wtss.R)</code>
+<p align="center">
+<img src="images/plot-ts-timeseries.png" alt="Figure 1 - Vegetation index (ts time series)."  />
+<p class="caption" align="center">
+Figure 1 - Vegetation index (ts time series).
+</p>
+</p>
 
-- Create a connection <code>chronos = wtss("http://www.dpi.inpe.br/mds/mds")</code>
+## References
 
-- Get the list of coverages provided by the service <code>coverages = listCoverages(chronos)</code>
-
-- Get the description of the first coverage <code>cv = describeCoverage(chronos,coverages[3])</code>
-
-- Get a time series <code>ts = timeSeries(chronos, names(cv), attributes="ndvi", latitude=-10.408, longitude=-53.495, start="2000-01-01", end="2016-04-15")</code>
-
-<b>NOTE:</b> For older R versions, it is also necessary to install the <i>digest</i> package.
- 
-## Building Instructions
-
-- Clone the project: <code>git clone https//github.com/e-sensing/wtss.R.git</code>.
-
-- Open Rstudio, go to File - Open Project and pick the file <code>wtss.R.Rproj</code>.
-
-- Install the required packages <code>install.packages(c("roxygen2", "testthat"))</code>.
-
-- Go to the <i>Build</i> tab in the upper-right panel and press the button <i>Build & Reload</i>. After this the package is ready to use.
-
-- You can also create a source package: Go to the <i>Build</i> tab, display the menu <i>More</i> and select the option <i>Build Source Package</i>.
-
+G. R. de Queiroz, K. R. Ferreira, L. Vinhas, G. Camara, R. W. da Costa, R. C. M. de Souza, V. W. Maus, and A. Sanchez. WTSS: um serviço web para extração de séries temporais de imagens de sensoriamento remoto. In Proceeding of the XVII Remote Sensing Brazilian Symposium, pages 7553-7560, 2015.
 
 ## Reporting Bugs
 
-Any problem should be reported to esensing-developers@dpi.inpe.br.
-
-
-For more information on wtss.R, please, visit its main web page at: http://www.dpi.inpe.br/esensing.
+Any problem should be reported to luizffga@dpi.inpe.br.
