@@ -23,6 +23,7 @@ ts.server <- WTSS("http://www.dpi.inpe.br/tws/wtss")
 The result is a Object of Class WTSS. 
 
 ``` r
+> ts.server
 Object of Class WTSS
 
 serverUrl:  http://www.dpi.inpe.br/tws/wtss 
