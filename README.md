@@ -33,7 +33,6 @@ listCoverages: MOD13Q1 mod13q1_512
 It is possible to get the list of coverages provided by the service.
 
 ```r
-# listing coverages of the server 
 > coverages <- listCoverages(ts.server)
 ```
 
@@ -44,10 +43,9 @@ The object is a vector containing all the coverages provided by the service.
 [1] "MOD13Q1"     "mod13q1_512"
 ```
 
-After that, we are able to acquire the coverage metadata. This function returns a named list of the coverage containing its attributes.
+After that, we are able to acquire the coverage metadata. This function returns a named list of the coverage containing its attributes. In the example below, we can see how to get metadata from the second coverage.
 
 ```r
-# get the description of the second coverage 
 > coverage.name <- coverages[2]
 > cv <- describeCoverage(ts.server, coverage.name)
 ```
@@ -55,18 +53,14 @@ After that, we are able to acquire the coverage metadata. This function returns 
 Finally, users can get the time series based on a set of required parameters.
 
 ```r
-# define the attributes of the coverages
 > attributes <- cv[[names(cv)]]$attributes$name
 
-# define the longitude and latitude
 > long <- -53.495
 > lat <- -10.408
 
-# define the start and end date
 > start <- "2000-02-18"
 > end <- "2016-01-01"
   
-# get a time series 
 > ts = timeSeries(ts.server, 
                   coverage.name, 
                   attributes, 
