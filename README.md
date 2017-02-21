@@ -9,7 +9,7 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 Installing and loading wtss.R package
 
 ``` r
-devtools::install_github("luizassis/wtss.R")
+devtools::install_github("e-sensing/wtss.R")
 library(wtss.R)
 ```
 
@@ -17,17 +17,67 @@ A simple example
 
 ``` r
 # create a WTSS connection 
-ts_server = WTSS("http://www.dpi.inpe.br/tws/wtss")
+ts.server <- WTSS("http://www.dpi.inpe.br/tws/wtss")
+```
 
-# get the list of coverages provided by the service 
-coverages = listCoverages(ts_server)
+The result is a Object of Class WTSS. 
 
+``` r
+Object of Class WTSS
+
+serverUrl:  http://www.dpi.inpe.br/tws/wtss 
+listCoverages: MOD13Q1 mod13q1_512
+
+```
+
+It is possible to get the list of coverages provided by the service.
+
+```r
+# listing coverages of the server 
+coverages <- listCoverages(ts.server)
+```
+
+The object is a vector containing all the coverages provided by the service. 
+
+```r
+[1] "MOD13Q1"     "mod13q1_512"
+```
+
+After that, we are able to acquire the coverage metadata. This function returns a named list of the coverage containing its attributes.
+
+```r
+coverage.name <- coverages[2]
 # get the description of the second coverage 
-cv = describeCoverage(ts_server,coverages[2])
+cv <- describeCoverage(ts.server, coverage.name)
+```
 
+Finally, users can get the time series based on a set of required parameters.
+
+```r
+# define the attributes of the coverages
+attributes <- cv[[1]]$attributes$name
+
+# define the longitude and latitude
+long <- -53.495
+lat <- -10.408
+
+# define the start and end date
+start <- "2000-02-18"
+end <- "2016-01-01"
+  
 # get a time series 
-ts = timeSeries(ts_server, names(cv), cv[[1]]$attributes$name, latitude=-10.408, longitude=-53.495, start="2000-02-18", end="2016-01-01")
+ts = timeSeries(ts.server, 
+		coverage.name, 
+		attributes, 
+		lat, 
+		long, 
+		start, 
+		end)
+```
 
+Plot the time series 
+
+```r
 plot(ts[[1]]$attributes[,1], main=sprintf("Pixel Center Coordinates Time-Series (%5.3f, %5.3f)", ts[[1]]$center_coordinate$latitude, ts[[1]]$center_coordinate$longitude), xlab="Time", ylab="Normalized Difference Vegetation Index")
 ```
 
