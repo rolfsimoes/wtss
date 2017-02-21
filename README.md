@@ -61,13 +61,13 @@ Finally, users can get the time series based on a set of required parameters.
 > start <- "2000-02-18"
 > end <- "2016-01-01"
   
-> ts = timeSeries(ts.server, 
-                  coverage.name, 
-                  attributes, 
-                  lat, 
-                  long, 
-                  start, 
-                  end)
+> ts = timeSeries(object = ts.server, 
+                  coverages = coverage.name, 
+                  attributes = attributes, 
+                  latitude = lat, 
+                  longitude = long, 
+                  start = start, 
+                  end = end)
 ```
 
 Plot the time series 
