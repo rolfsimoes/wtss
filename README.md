@@ -9,15 +9,14 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 Installing and loading wtss.R package
 
 ``` r
-devtools::install_github("e-sensing/wtss.R")
-library(wtss.R)
+> devtools::install_github("e-sensing/wtss.R")
+> library(wtss.R)
 ```
 
-A simple example
+A simple example of creating a WTSS connection
 
-``` r
-# create a WTSS connection 
-ts.server <- WTSS("http://www.dpi.inpe.br/tws/wtss")
+``` r 
+> ts.server <- WTSS("http://www.dpi.inpe.br/tws/wtss")
 ```
 
 The result is a Object of Class WTSS. 
@@ -35,20 +34,21 @@ It is possible to get the list of coverages provided by the service.
 
 ```r
 # listing coverages of the server 
-coverages <- listCoverages(ts.server)
+> coverages <- listCoverages(ts.server)
 ```
 
 The object is a vector containing all the coverages provided by the service. 
 
 ```r
+> coverages
 [1] "MOD13Q1"     "mod13q1_512"
 ```
 
 After that, we are able to acquire the coverage metadata. This function returns a named list of the coverage containing its attributes.
 
 ```r
-coverage.name <- coverages[2]
 # get the description of the second coverage 
+coverage.name <- coverages[2]
 cv <- describeCoverage(ts.server, coverage.name)
 ```
 
@@ -56,7 +56,7 @@ Finally, users can get the time series based on a set of required parameters.
 
 ```r
 # define the attributes of the coverages
-attributes <- cv[[1]]$attributes$name
+attributes <- cv[[names(cv)]]$attributes$name
 
 # define the longitude and latitude
 long <- -53.495
