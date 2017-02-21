@@ -69,11 +69,11 @@ Finally, users can get the time series based on a set of required parameters.
 # get a time series 
 > ts = timeSeries(ts.server, 
                   coverage.name, 
-		  attributes, 
-		  lat, 
-		  long, 
-		  start, 
-		  end)
+                  attributes, 
+                  lat, 
+                  long, 
+                  start, 
+                  end)
 ```
 
 Plot the time series 
