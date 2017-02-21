@@ -48,32 +48,32 @@ After that, we are able to acquire the coverage metadata. This function returns 
 
 ```r
 # get the description of the second coverage 
-coverage.name <- coverages[2]
-cv <- describeCoverage(ts.server, coverage.name)
+> coverage.name <- coverages[2]
+> cv <- describeCoverage(ts.server, coverage.name)
 ```
 
 Finally, users can get the time series based on a set of required parameters.
 
 ```r
 # define the attributes of the coverages
-attributes <- cv[[names(cv)]]$attributes$name
+> attributes <- cv[[names(cv)]]$attributes$name
 
 # define the longitude and latitude
-long <- -53.495
-lat <- -10.408
+> long <- -53.495
+> lat <- -10.408
 
 # define the start and end date
-start <- "2000-02-18"
-end <- "2016-01-01"
+> start <- "2000-02-18"
+> end <- "2016-01-01"
   
 # get a time series 
-ts = timeSeries(ts.server, 
-		coverage.name, 
-		attributes, 
-		lat, 
-		long, 
-		start, 
-		end)
+> ts = timeSeries(ts.server, 
+                  coverage.name, 
+		  attributes, 
+		  lat, 
+		  long, 
+		  start, 
+		  end)
 ```
 
 Plot the time series 
