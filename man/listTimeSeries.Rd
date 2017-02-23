@@ -35,4 +35,3 @@ coordinates = list(c(-45,-12),  c(-54,-11))
 attributes = objdesc[[1]]$attributes$name[1]
 tsList = listTimeSeries(obj, names(objdesc), attributes, coordinates, "2014-01-01", "2015-01-01")
 }
-

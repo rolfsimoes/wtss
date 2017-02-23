@@ -18,4 +18,3 @@ setServerUrl(object, aServerUrl)
 \description{
 Sets the object's server URL
 }
-

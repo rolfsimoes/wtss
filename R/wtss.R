@@ -177,7 +177,7 @@ setMethod("setServerUrl","WTSS", function(object, aServerUrl) {
 #' @docType methods
 #' @export
 #' @examples
-#' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+#' obj = WTSS("http://150.163.2.38:7653/wtss")
 #' objlist = listCoverages(obj)
 setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
 
@@ -276,8 +276,8 @@ setMethod("describeCoverage","WTSS", function(object,coverages) {
 #' @param coverages Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
 #' @param coordinates A list or data frame of longitude latitude coordinates in WGS84 coordinate system.
-#' @param start A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
-#' @param end A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
+#' @param start_date A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
+#' @param end_date A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
 #' @docType methods
 #' @export
 #' @examples
@@ -287,10 +287,10 @@ setMethod("describeCoverage","WTSS", function(object,coverages) {
 #' coordinates = list(c(-45,-12),  c(-54,-11))
 #' attributes = objdesc[[1]]$attributes$name[1]
 #' tsList = listTimeSeries(obj, names(objdesc), attributes, coordinates, "2014-01-01", "2015-01-01")
-setGeneric("listTimeSeries",function(object,coverages,attributes,coordinates,start,end){standardGeneric("listTimeSeries")})
+setGeneric("listTimeSeries",function(object,coverages,attributes,coordinates,start_date,end_date){standardGeneric("listTimeSeries")})
 
 #' @rdname  listTimeSeries
-setMethod("listTimeSeries","WTSS", function(object,coverages,attributes,coordinates,start,end) {
+setMethod("listTimeSeries","WTSS", function(object,coverages,attributes,coordinates,start_date,end_date) {
   
   # check type of the list of coordinates 
   if( is.data.frame(coordinates) | is.matrix(coordinates))
@@ -302,7 +302,7 @@ setMethod("listTimeSeries","WTSS", function(object,coverages,attributes,coordina
   out <- lapply(coordinates, function(coords) {
     longitude <- coords[1]
     latitude <- coords[2]
-    items <- .timeSeries(object,coverages,attributes,longitude,latitude,start,end)
+    items <- .timeSeries(object,coverages,attributes,longitude,latitude,start_date,end_date)
   })
   
   return(out)
@@ -318,8 +318,8 @@ setMethod("listTimeSeries","WTSS", function(object,coverages,attributes,coordina
 #' @param attributes A character vector of dataset names.
 #' @param longitude A longitude in WGS84 coordinate system.
 #' @param latitude A latitude in WGS84 coordinate system.
-#' @param start A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
-#' @param end A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
+#' @param start_date A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
+#' @param end_date A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
 #' @docType methods
 #' @export
 #' @examples
@@ -328,16 +328,16 @@ setMethod("listTimeSeries","WTSS", function(object,coverages,attributes,coordina
 #' objdesc = describeCoverage(obj,objlist[2])
 #' attributes = objdesc[[1]]$attributes$name[1]
 #' ts = timeSeries(obj, names(objdesc), attributes, -45,-12,"2000-02-18","2004-01-01")
-setGeneric("timeSeries",function(object,coverages,attributes,longitude,latitude,start,end){standardGeneric("timeSeries")})
+setGeneric("timeSeries",function(object,coverages,attributes,longitude,latitude,start_date,end_date){standardGeneric("timeSeries")})
 
 #' @rdname  timeSeries
-setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,latitude,start,end) {
+setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,latitude,start_date,end_date) {
   
-  .timeSeries(object,coverages,attributes,longitude,latitude,start,end)
+  .timeSeries(object,coverages,attributes,longitude,latitude,start_date,end_date)
   
 })
 
-.timeSeries <- function(object,coverages,attributes,longitude,latitude,start,end) {
+.timeSeries <- function(object,coverages,attributes,longitude,latitude,start_date,end_date) {
   
   if(missing(object))
     stop("Missing either a WTSS object or a server URL.")
@@ -358,8 +358,8 @@ setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,la
       out <- lapply(names(coverages), function(cov) {
         
         request <- paste(url,"time_series?coverage=",cov,"&attributes=",paste(attributes, collapse=","),
-                         "&latitude=",latitude,"&longitude=",longitude,
-                         "&start=",start,"&end=",end,sep="")
+                         "&longitude=",longitude,"&latitude=",latitude,
+                         "&start_date=",start_date,"&end_date=",end_date,sep="")
         
         # try only 10 times (avoid time out connection)
         while(class(items) == "try-error" & ce < 10) {
@@ -389,8 +389,8 @@ setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,la
         if(is.character(coverages) && length(coverages)==1 && is.character(attributes)) {
           
             request <- paste(url,"time_series?coverage=",coverages,"&attributes=",paste(attributes, collapse=","),
-                             "&latitude=",latitude,"&longitude=",longitude,
-                             "&start=",start,"&end=",end,sep="")
+                             "&longitude=",longitude,"&latitude=",latitude,
+                             "&start_date=",start_date,"&end_date=",end_date,sep="")
             
             # try only 10 times (avoid time out connection)
             while(class(items) == "try-error" & ce < 10) {
@@ -501,20 +501,20 @@ setMethod("as.STFDF","list", function(timeseries) {
 #' @param cv Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
 #' @param attributes A character vector of dataset names.
 #' @param polygon A polygon area.
-#' @param start A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
-#' @param end A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
+#' @param start_date A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
+#' @param end_date A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
 #' @docType methods
 #' @export
-setGeneric("polygonTimeSeries", function(object, cv, attributes, polygon, start, end){standardGeneric("polygonTimeSeries")})
+setGeneric("polygonTimeSeries", function(object, cv, attributes, polygon, start_date, end_date){standardGeneric("polygonTimeSeries")})
 
 #' @rdname polygonTimeSeries
-setMethod("polygonTimeSeries","WTSS", function(object, cv, attributes, polygon, start, end) {
+setMethod("polygonTimeSeries","WTSS", function(object, cv, attributes, polygon, start_date, end_date) {
   
-  .polygonTimeSeries(object, cv, attributes, polygon, start, end) 
+  .polygonTimeSeries(object, cv, attributes, polygon, start_date, end_date) 
   
 })
 
-.polygonTimeSeries <- function(object, cv, attributes, polygon, start, end) {
+.polygonTimeSeries <- function(object, cv, attributes, polygon, start_date, end_date) {
   
   
   x <- c(cv[[1]]$geo_extent$spatial$extent$xmin, cv[[1]]$geo_extent$spatial$extent$xmax)
@@ -543,7 +543,7 @@ setMethod("polygonTimeSeries","WTSS", function(object, cv, attributes, polygon, 
   
   for (i in seq(from=lat_li, to=lat_rs, by=resolution)) {
     for (j in seq(from=lon_li, to=lon_rs, by=resolution)) {
-      ts = timeSeries(object, names(cv), attributes=attributes, latitude=i, longitude=j, start=start, end=end)
+      ts = timeSeries(object, names(cv), attributes=attributes, latitude=i, longitude=j, start_date=start_date, end=end)
       if (Position(function(x) identical(x, c(ts[[1]]$center_coordinate$longitude,ts[[1]]$center_coordinate$latitude)), list_coordinates, nomatch = 0) > 0) {
         cat("longitude = ", ts[[1]]$center_coordinate$longitude, "latitude = ", ts[[1]]$center_coordinate$latitude, "\n")
         next

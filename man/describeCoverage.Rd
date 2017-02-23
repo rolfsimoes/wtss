@@ -22,4 +22,3 @@ Describe coverage
 obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
 objdesc = describeCoverage(obj,listCoverages(obj)[1])
 }
-

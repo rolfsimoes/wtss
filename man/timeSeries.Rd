@@ -36,4 +36,3 @@ objdesc = describeCoverage(obj,objlist[2])
 attributes = objdesc[[1]]$attributes$name[1]
 ts = timeSeries(obj, names(objdesc), attributes, -45,-12,"2000-02-18","2004-01-01")
 }
-

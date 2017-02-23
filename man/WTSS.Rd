@@ -4,6 +4,7 @@
 \name{WTSS}
 \alias{WTSS}
 \alias{WTSS-class}
+\alias{WTSS}
 \title{The WTSS class}
 \usage{
 WTSS(serverUrl)
@@ -26,10 +27,10 @@ No notes
 \item{\code{listCoverages}:}{Object of class \code{"character"}, list of coverages.}
 }
 }
+
 \examples{
 obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
 }
 \author{
 Victor Maus, Alber Sanchez, Luiz Fernando Assis, Pedro Andrade, Gilberto Ribeiro
 }
-
