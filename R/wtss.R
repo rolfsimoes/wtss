@@ -96,7 +96,7 @@ setMethod(
 #' @docType methods
 #' @export
 #' @examples
-#' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
+#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
 WTSS <- function(serverUrl) {
   
   new (Class="WTSS",serverUrl = serverUrl)
@@ -177,8 +177,8 @@ setMethod("setServerUrl","WTSS", function(object, aServerUrl) {
 #' @docType methods
 #' @export
 #' @examples
-#' obj = WTSS("http://150.163.2.38:7653/wtss")
-#' objlist = listCoverages(obj)
+#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
+#' coverages = listCoverages(ts.server)
 setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
 
 #' @rdname  listCoverages
@@ -223,8 +223,8 @@ setMethod("listCoverages","WTSS", function(object) {
 #' @docType methods
 #' @export
 #' @examples
-#' obj = WTSS("http://www.dpi.inpe.br/ts/wtss")
-#' objdesc = describeCoverage(obj,listCoverages(obj)[1])
+#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
+#' cv = describeCoverage(ts.server, listCoverages(ts.server)[1])
 setGeneric("describeCoverage",function(object,coverages){standardGeneric("describeCoverage")})
 
 
@@ -281,12 +281,20 @@ setMethod("describeCoverage","WTSS", function(object,coverages) {
 #' @docType methods
 #' @export
 #' @examples
-#' obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
-#' objlist = listCoverages(obj)
-#' objdesc = describeCoverage(obj,objlist[2])
+#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
+#' coverages = listCoverages(ts.server)
+#' cv = describeCoverage(ts.server, coverages[1])
+#' name.cv = names(cv)
 #' coordinates = list(c(-45,-12),  c(-54,-11))
-#' attributes = objdesc[[1]]$attributes$name[1]
-#' tsList = listTimeSeries(obj, names(objdesc), attributes, coordinates, "2014-01-01", "2015-01-01")
+#' attributes = cv[[1]]$attributes$name[1]
+#' start_date = "2014-01-01"
+#' end_date = "2015-01-01"
+#' tsList = listTimeSeries(ts.server, 
+#'                         name.cv, 
+#'                         attributes, 
+#'                         coordinates, 
+#'                         start_date, 
+#'                         end_date)
 setGeneric("listTimeSeries",function(object,coverages,attributes,coordinates,start_date,end_date){standardGeneric("listTimeSeries")})
 
 #' @rdname  listTimeSeries
@@ -323,11 +331,22 @@ setMethod("listTimeSeries","WTSS", function(object,coverages,attributes,coordina
 #' @docType methods
 #' @export
 #' @examples
-#' obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
-#' objlist = listCoverages(obj)
-#' objdesc = describeCoverage(obj,objlist[2])
-#' attributes = objdesc[[1]]$attributes$name[1]
-#' ts = timeSeries(obj, names(objdesc), attributes, -45,-12,"2000-02-18","2004-01-01")
+#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
+#' coverages = listCoverages(ts.server)
+#' cv = describeCoverage(ts.server, coverages[1])
+#' name.cv = names(cv)
+#' attr = cv[[1]]$attributes$name[1]
+#' longitude = -45
+#' latitude = -12
+#' start_date = "2000-02-18"
+#' end_date = "2004-01-01"
+#' ts = timeSeries(ts.server, 
+#'                 name.cv, 
+#'                 attr, 
+#'                 longitude, 
+#'                 latitude, 
+#'                 start_date, 
+#'                 end_date)
 setGeneric("timeSeries",function(object,coverages,attributes,longitude,latitude,start_date,end_date){standardGeneric("timeSeries")})
 
 #' @rdname  timeSeries
@@ -453,7 +472,7 @@ setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,la
       if(any(format == "%Y-%m-%d"))
         timeline = as.Date(timeline, format)
   
-  return(list(center_coordinate = data.frame(longitude=items$result$center_coordinate$longitude, latitude=items$result$center_coordinate$latitude), 
+  return(list(center_coordinate = data.frame(longitude=items$result$coordinates$longitude, latitude=items$result$coordinates$latitude), 
               attributes = zoo(attributes.processed, timeline)))
   
 }
@@ -466,11 +485,21 @@ setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,la
 #' @docType methods
 #' @export
 #' @examples
-#' chronos = WTSS("http://www.dpi.inpe.br/tws/wtss")
-#' coverages  = listCoverages(chronos)
+#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
+#' coverages  = listCoverages(ts.server)
 #' cv = describeCoverage(chronos, coverages[2])
 #' attributes = cv[[1]]$attributes$name[1] 
-#' ts = timeSeries(chronos, names(cv), attributes, -55,-13,"2000-02-18","2001-01-01")
+#' longitude = -47
+#' latitude = -21.7
+#' start_date = "2013-01-01"
+#' end_date =  ""2016-12-12"
+#' ts = timeSeries(chronos, 
+#'                 names(cv), 
+#'                 attributes, 
+#'                 longitude,
+#'                 latitude,
+#'                 start_date,
+#'                 end_date)
 #' stfdf <- as.STFDF(ts)
 setGeneric("as.STFDF", function(timeseries){standardGeneric("as.STFDF")})
  
@@ -493,71 +522,6 @@ setMethod("as.STFDF","list", function(timeseries) {
  
 }
 
-#' get Time Series by polygon
-#'
-#' @description This function retrieves the time series from a polygon area
-#' 
-#' @param object Either a WTSS object or a server URL
-#' @param cv Either a list of coverages and attributes such as retrieved by describe_coverage() or a character with the coverage name.
-#' @param attributes A character vector of dataset names.
-#' @param polygon A polygon area.
-#' @param start_date A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
-#' @param end_date A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.
-#' @docType methods
-#' @export
-setGeneric("polygonTimeSeries", function(object, cv, attributes, polygon, start_date, end_date){standardGeneric("polygonTimeSeries")})
-
-#' @rdname polygonTimeSeries
-setMethod("polygonTimeSeries","WTSS", function(object, cv, attributes, polygon, start_date, end_date) {
-  
-  .polygonTimeSeries(object, cv, attributes, polygon, start_date, end_date) 
-  
-})
-
-.polygonTimeSeries <- function(object, cv, attributes, polygon, start_date, end_date) {
-  
-  
-  x <- c(cv[[1]]$geo_extent$spatial$extent$xmin, cv[[1]]$geo_extent$spatial$extent$xmax)
-  y <- c(cv[[1]]$geo_extent$spatial$extent$ymin, cv[[1]]$geo_extent$spatial$extent$ymax)
-  spatial_extent <- bbox(SpatialPoints(cbind(x,y)))
-  
-  spatial_resolution <- c(x = cv[[1]]$geo_extent$spatial$resolution$x, y = cv[[1]]$geo_extent$spatial$resolution$y)
-  
-  minimum_bb = bbox(polygon)
-  
-  intersect_spatial <- bbox(intersect(minimum_bb, spatial_extent))
-  
-  # left inferior boundary
-  lat_li = intersect_spatial[1]
-  lon_li = intersect_spatial[2]
-  lat_rs = intersect_spatial[3]
-  lon_rs = intersect_spatial[4]
-  
-  # center coordinates resolution
-  resolution = 0.05
-  
-  # initializing variables
-  list_coordinates <- list()
-  list_time_series <- list()
-  n_elem = 1
-  
-  for (i in seq(from=lat_li, to=lat_rs, by=resolution)) {
-    for (j in seq(from=lon_li, to=lon_rs, by=resolution)) {
-      ts = timeSeries(object, names(cv), attributes=attributes, latitude=i, longitude=j, start_date=start_date, end=end)
-      if (Position(function(x) identical(x, c(ts[[1]]$center_coordinate$longitude,ts[[1]]$center_coordinate$latitude)), list_coordinates, nomatch = 0) > 0) {
-        cat("longitude = ", ts[[1]]$center_coordinate$longitude, "latitude = ", ts[[1]]$center_coordinate$latitude, "\n")
-        next
-      }
-      list_coordinates[[n_elem]] <- c(ts$MOD13Q1$center_coordinate$longitude,ts$MOD13Q1$center_coordinate$latitude)
-      list_time_series[[n_elem]] <- list(center_coordinates = c(ts$MOD13Q1$center_coordinate$longitude,ts$MOD13Q1$center_coordinate$latitude), values = ts$MOD13Q1$attributes$ndvi)
-      n_elem=n_elem+1
-    }
-  }
-  
-  return (list_time_series)
-  
-}
-
 .sendRequest <- function(request) {
   
   # check if URL exists and perform the request
@@ -573,12 +537,10 @@ setMethod("polygonTimeSeries","WTSS", function(object, cv, attributes, polygon, 
 .parseJSON <- function(response) {
   
   # validate json
-  if (validate(response))
+  if (validate(response)) {
     json_response <- fromJSON(response)
-  else {
-    # no json returned error handling
-    json_response <- toJSON("ERROR: Request to the web time series service failed!")
-    class(json_response) <- "try-error"
+    if("exception" %in% names(json_response))
+      stop(json_response)
   }
   
   return(json_response)
