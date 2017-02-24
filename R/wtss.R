@@ -526,7 +526,7 @@ setMethod("as.STFDF","list", function(timeseries) {
   
   # check if URL exists and perform the request
   tryCatch(response <- getURL(request), error = function(e) {
-    e$message <- paste("HTTP request failed. The URL server may be incorrect or the time series service does not exist."); 
+    e$message <- paste("HTTP request failed. The URL server may be incorrect or the service may be temporarily unavailable."); 
     stop(e);
   })
   
