@@ -16,7 +16,7 @@ Installing and loading wtss.R package
 A simple example of creating a WTSS connection
 
 ``` r 
-> ts.server <- WTSS("http://www.dpi.inpe.br/tws/wtss")
+> ts.server <- WTSS(URL_wtss_server)
 ```
 
 The result is a Object of Class WTSS. 
