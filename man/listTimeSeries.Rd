@@ -6,10 +6,10 @@
 \alias{listTimeSeries,WTSS-method}
 \title{Get list of time series}
 \usage{
-listTimeSeries(object, coverages, attributes, coordinates, start, end)
+listTimeSeries(object, coverages, attributes, coordinates, start_date, end_date)
 
 \S4method{listTimeSeries}{WTSS}(object, coverages, attributes, coordinates,
-  start, end)
+  start_date, end_date)
 }
 \arguments{
 \item{object}{Either a WTSS object or a server URL.}
@@ -20,19 +20,26 @@ listTimeSeries(object, coverages, attributes, coordinates, start, end)
 
 \item{coordinates}{A list or data frame of longitude latitude coordinates in WGS84 coordinate system.}
 
-\item{start}{A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
+\item{start_date}{A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
 
-\item{end}{A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
+\item{end_date}{A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
 }
 \description{
 This function retrieves the time series for a list of coordinates.
 }
 \examples{
-obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
-objlist = listCoverages(obj)
-objdesc = describeCoverage(obj,objlist[2])
+ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
+coverages = listCoverages(ts.server)
+cv = describeCoverage(ts.server, coverages[3])
+name.cv = names(cv)
 coordinates = list(c(-45,-12),  c(-54,-11))
-attributes = objdesc[[1]]$attributes$name[1]
-tsList = listTimeSeries(obj, names(objdesc), attributes, coordinates, "2014-01-01", "2015-01-01")
+attributes = cv[[1]]$attributes$name[1]
+start_date = "2014-01-01"
+end_date = "2015-01-01"
+tsList = listTimeSeries(ts.server, 
+                        name.cv, 
+                        attributes, 
+                        coordinates, 
+                        start_date, 
+                        end_date)
 }
-

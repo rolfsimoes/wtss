@@ -6,10 +6,11 @@
 \alias{timeSeries,WTSS-method}
 \title{Get time series}
 \usage{
-timeSeries(object, coverages, attributes, longitude, latitude, start, end)
+timeSeries(object, coverages, attributes, longitude, latitude, start_date,
+  end_date)
 
 \S4method{timeSeries}{WTSS}(object, coverages, attributes, longitude, latitude,
-  start, end)
+  start_date, end_date)
 }
 \arguments{
 \item{object}{Either a WTSS object or a server URL}
@@ -22,18 +23,28 @@ timeSeries(object, coverages, attributes, longitude, latitude, start, end)
 
 \item{latitude}{A latitude in WGS84 coordinate system.}
 
-\item{start}{A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
+\item{start_date}{A character with the start date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
 
-\item{end}{A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
+\item{end_date}{A character with the end date in the format yyyy-mm-dd or yyyy-mm depending on the coverage.}
 }
 \description{
 This function retrieves the time series for a pair of coordinates.es
 }
 \examples{
-obj = WTSS("http://www.dpi.inpe.br/tws/wtss")
-objlist = listCoverages(obj)
-objdesc = describeCoverage(obj,objlist[2])
-attributes = objdesc[[1]]$attributes$name[1]
-ts = timeSeries(obj, names(objdesc), attributes, -45,-12,"2000-02-18","2004-01-01")
+ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
+coverages = listCoverages(ts.server)
+cv = describeCoverage(ts.server, coverages[3])
+name.cv = names(cv)
+attr = cv[[1]]$attributes$name[1]
+longitude = -45
+latitude = -12
+start_date = "2000-02-18"
+end_date = "2004-01-01"
+ts = timeSeries(ts.server, 
+                name.cv, 
+                attr, 
+                longitude, 
+                latitude, 
+                start_date, 
+                end_date)
 }
-

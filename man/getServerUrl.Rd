@@ -3,8 +3,8 @@
 \docType{methods}
 \name{getServerUrl}
 \alias{getServerUrl}
-\alias{getServerUrl,WTSS-method}
 \alias{getServerUrl-generic}
+\alias{getServerUrl,WTSS-method}
 \title{Returns the object's server URL}
 \usage{
 getServerUrl(object)
@@ -17,4 +17,3 @@ getServerUrl(object)
 \description{
 Returns the object's server URL
 }
-
