@@ -9,65 +9,68 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 Installing and loading wtss.R package
 
 ``` r
-> devtools::install_github("e-sensing/wtss.R")
-> library(wtss.R)
+devtools::install_github("e-sensing/wtss.R")
+library(wtss.R)
 ```
 
 A simple example of creating a WTSS connection
 
 ``` r 
-> ts.server <- WTSS(URL_wtss_server)
+ts.server <- WTSS("http://www.dpi.inpe.br/tws/wtss")
 ```
 
 The result is a Object of Class WTSS. 
 
 ``` r
-> ts.server
+ts.server
+
 Object of Class WTSS
 
 serverUrl:  http://www.dpi.inpe.br/tws/wtss 
-listCoverages: MOD13Q1 mod13q1_512
-
+listCoverages: itobi merge mod13q1_512
 ```
 
 It is possible to get the list of coverages provided by the service.
 
-```r
-> coverages <- listCoverages(ts.server)
+``` r
+coverages <- listCoverages(ts.server)
 ```
 
 The object is a vector containing all the coverages provided by the service. 
 
-```r
-> coverages
-[1] "MOD13Q1"     "mod13q1_512"
+``` r
+coverages
+```
+
+``` r
+## [1] "itobi"       "merge"       "mod13q1_512"
 ```
 
 After that, we are able to acquire the coverage metadata. This function returns a named list of the coverage containing its attributes. In the example below, we can see how to get metadata from the second coverage.
 
 ```r
-> coverage.name <- coverages[2]
-> cv <- describeCoverage(ts.server, coverage.name)
+coverage.name <- coverages[3]
+cv <- describeCoverage(ts.server, coverage.name)
 ```
 
 Finally, users can get the time series based on a set of required parameters.
 
 ```r
-> attributes <- cv[[names(cv)]]$attributes$name
+attributes <- cv[[names(cv)]]$attributes$name
 
-> long <- -53.495
-> lat <- -10.408
+long <- -53.495
+lat <- -10.408
 
-> start <- "2000-02-18"
-> end <- "2016-01-01"
+start <- "2000-02-18"
+end <- "2017-02-18"
   
-> ts = timeSeries(object = ts.server, 
-                  coverages = coverage.name, 
-                  attributes = attributes, 
-                  latitude = lat, 
-                  longitude = long, 
-                  start = start, 
-                  end = end)
+ts = timeSeries(object = ts.server, 
+                coverages = coverage.name, 
+                attributes = attributes, 
+                latitude = lat, 
+                longitude = long, 
+                start = start, 
+                end = end)
 ```
 
 Plot the time series 
