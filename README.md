@@ -1,6 +1,6 @@
 # R Client API for Web Time Series Service
 
-**wtss.R** is an R client package for handling Web Time-Series Service (WTSS) in the client side. For more information on WTSS see  its specification and documentation in the TWS [site](https://github.com/e-sensing/tws). 
+**wtss** is an R client package for handling Web Time-Series Service (WTSS) in the client side. For more information on WTSS see  its specification and documentation in the TWS [site](https://github.com/e-sensing/tws). 
 
 This R Client API is based on the orginal version developed by Alber Sanchez at https://github.com/albhasan/rwtss.
 
