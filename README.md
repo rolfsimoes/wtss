@@ -23,11 +23,13 @@ The result is a Object of Class WTSS.
 
 ``` r
 ts.server
+```
 
-Object of Class WTSS
+``` r
+## Object of Class WTSS
 
-serverUrl:  http://www.dpi.inpe.br/tws/wtss 
-listCoverages: itobi merge mod13q1_512
+## serverUrl:  http://www.dpi.inpe.br/tws/wtss 
+## listCoverages: itobi merge mod13q1_512
 ```
 
 It is possible to get the list of coverages provided by the service.
