@@ -1,4 +1,4 @@
-Package: wtss.R
+Package: wtss
 Type: Package
 Title: An R client for handling remote sensing imagery as time series
 Version: 0.1.2
@@ -12,7 +12,7 @@ Authors@R: c(person("Victor", "Maus", role = c("aut"),email
     role = c("aut"),email ="gribeiro@dpi.inpe.br"))
 Author: Victor Maus, Alber Sanchez, Luiz Fernando Assis, Pedro Andrade, Gilberto Ribeiro
 Maintainer: Luiz Fernando Assis <luizffga@dpi.inpe.br>
-Description: wtss.R is an R client package for Web Time-Series Service (WTSS). It allows Earth observation users to request in near real-time metadata based on coverages available on WTSS. It provides classes and methods for handling remote sensing imagery as time series based using spatio-temporal filtering. Coverages include but are not limited to daily and montlhy aggregated hotspot data of vegetation fires, and MODIS data. 
+Description: wtss is an R client package for Web Time-Series Service (WTSS). It allows Earth observation users to request in near real-time metadata based on coverages available on WTSS. It provides classes and methods for handling remote sensing imagery as time series based using spatio-temporal filtering. Coverages include but are not limited to daily and montlhy aggregated hotspot data of vegetation fires, and MODIS data. 
 Depends: R (>= 3.0.0)
 Imports:
     methods,
