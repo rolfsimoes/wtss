@@ -96,7 +96,7 @@ setMethod(
 #' @docType methods
 #' @export
 #' @examples
-#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
+#' ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 WTSS <- function(serverUrl) {
   
   new (Class="WTSS",serverUrl = serverUrl)
@@ -177,7 +177,7 @@ setMethod("setServerUrl","WTSS", function(object, aServerUrl) {
 #' @docType methods
 #' @export
 #' @examples
-#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
+#' ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 #' coverages = listCoverages(ts.server)
 setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
 
@@ -223,8 +223,8 @@ setMethod("listCoverages","WTSS", function(object) {
 #' @docType methods
 #' @export
 #' @examples
-#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
-#' cv = describeCoverage(ts.server, listCoverages(ts.server)[1])
+#' ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
+#' cv = describeCoverage(ts.server, listCoverages(ts.server)[3])
 setGeneric("describeCoverage",function(object,coverages){standardGeneric("describeCoverage")})
 
 
@@ -281,9 +281,9 @@ setMethod("describeCoverage","WTSS", function(object,coverages) {
 #' @docType methods
 #' @export
 #' @examples
-#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
+#' ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 #' coverages = listCoverages(ts.server)
-#' cv = describeCoverage(ts.server, coverages[1])
+#' cv = describeCoverage(ts.server, coverages[3])
 #' name.cv = names(cv)
 #' coordinates = list(c(-45,-12),  c(-54,-11))
 #' attributes = cv[[1]]$attributes$name[1]
@@ -331,9 +331,9 @@ setMethod("listTimeSeries","WTSS", function(object,coverages,attributes,coordina
 #' @docType methods
 #' @export
 #' @examples
-#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
+#' ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 #' coverages = listCoverages(ts.server)
-#' cv = describeCoverage(ts.server, coverages[1])
+#' cv = describeCoverage(ts.server, coverages[3])
 #' name.cv = names(cv)
 #' attr = cv[[1]]$attributes$name[1]
 #' longitude = -45
@@ -485,15 +485,15 @@ setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,la
 #' @docType methods
 #' @export
 #' @examples
-#' ts.server = WTSS("http://150.163.2.38:7653/wtss")
+#' ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 #' coverages  = listCoverages(ts.server)
-#' cv = describeCoverage(chronos, coverages[2])
+#' cv = describeCoverage(ts.server, coverages[3])
 #' attributes = cv[[1]]$attributes$name[1] 
 #' longitude = -47
 #' latitude = -21.7
 #' start_date = "2013-01-01"
 #' end_date =  ""2016-12-12"
-#' ts = timeSeries(chronos, 
+#' ts = timeSeries(ts.server, 
 #'                 names(cv), 
 #'                 attributes, 
 #'                 longitude,
@@ -541,8 +541,9 @@ setMethod("as.STFDF","list", function(timeseries) {
     json_response <- fromJSON(response)
     if("exception" %in% names(json_response))
       stop(json_response)
+    return(json_response)
   }
-  
-  return(response)
+  else
+    return(response)
   
 }
