@@ -9,7 +9,7 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 Installing and loading wtss package
 
 ``` r
-devtools::install_github("e-sensing/wtss")
+devtools::install_github("luizassis/wtss")
 library(wtss)
 ```
 
