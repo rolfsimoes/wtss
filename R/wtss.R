@@ -544,6 +544,6 @@ setMethod("as.STFDF","list", function(timeseries) {
     return(json_response)
   }
   else
-    return(response)
+    stop(response)
   
 }
