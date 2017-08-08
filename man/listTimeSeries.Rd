@@ -30,7 +30,7 @@ This function retrieves the time series for a list of coordinates.
 \examples{
 ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 coverages = listCoverages(ts.server)
-cv = describeCoverage(ts.server, coverages[3])
+cv = describeCoverage(ts.server, coverages[5])
 name.cv = names(cv)
 coordinates = list(c(-45,-12),  c(-54,-11))
 attributes = cv[[1]]$attributes$name[1]

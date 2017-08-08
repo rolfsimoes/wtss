@@ -283,7 +283,7 @@ setMethod("describeCoverage","WTSS", function(object,coverages) {
 #' @examples
 #' ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 #' coverages = listCoverages(ts.server)
-#' cv = describeCoverage(ts.server, coverages[3])
+#' cv = describeCoverage(ts.server, coverages[5])
 #' name.cv = names(cv)
 #' coordinates = list(c(-45,-12),  c(-54,-11))
 #' attributes = cv[[1]]$attributes$name[1]
@@ -333,7 +333,7 @@ setMethod("listTimeSeries","WTSS", function(object,coverages,attributes,coordina
 #' @examples
 #' ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 #' coverages = listCoverages(ts.server)
-#' cv = describeCoverage(ts.server, coverages[3])
+#' cv = describeCoverage(ts.server, coverages[5])
 #' name.cv = names(cv)
 #' attr = cv[[1]]$attributes$name[1]
 #' longitude = -45
@@ -487,7 +487,7 @@ setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,la
 #' @examples
 #' ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 #' coverages  = listCoverages(ts.server)
-#' cv = describeCoverage(ts.server, coverages[3])
+#' cv = describeCoverage(ts.server, coverages[5])
 #' attributes = cv[[1]]$attributes$name[1] 
 #' longitude = -47
 #' latitude = -21.7
@@ -544,6 +544,6 @@ setMethod("as.STFDF","list", function(timeseries) {
     return(json_response)
   }
   else
-    return(response)
+    stop(response)
   
 }
