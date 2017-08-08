@@ -9,8 +9,8 @@ This R Client API is based on the orginal version developed by Alber Sanchez at 
 Installing and loading wtss package
 
 ``` r
-devtools::install_github("luizassis/wtss")
-library(wtss)
+devtools::install_github("e-sensing/wtss.R") # github repository name is wtss.R
+library(wtss) // R package name is wtss
 ```
 
 A simple example of creating a WTSS connection
@@ -45,13 +45,13 @@ coverages
 ```
 
 ``` r
-## [1] "itobi"       "merge"       "mod13q1_512"
+## [1] "itobi"       "merge"     "mixl8mod"     "mixl8mod_f"     "mod13q1_512"
 ```
 
 After that, we are able to acquire the coverage metadata. This function returns a named list of the coverage containing its attributes. In the example below, we can see how to get metadata from the second coverage.
 
 ```r
-coverage.name <- coverages[3]
+coverage.name <- "mod13q1_512"
 cv <- describeCoverage(ts.server, coverage.name)
 ```
 
