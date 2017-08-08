@@ -10,7 +10,7 @@ Installing and loading wtss package
 
 ``` r
 devtools::install_github("e-sensing/wtss.R") # github repository name is wtss.R
-library(wtss) // R package name is wtss
+library(wtss) # R package name is wtss
 ```
 
 A simple example of creating a WTSS connection
@@ -29,7 +29,7 @@ ts.server
 ## Object of Class WTSS
 
 ## serverUrl:  http://www.dpi.inpe.br/tws/wtss 
-## listCoverages: itobi merge mod13q1_512
+## listCoverages: itobi merge mixl8mod mixl8mod_f mod13q1_512
 ```
 
 It is possible to get the list of coverages provided by the service.
@@ -94,4 +94,4 @@ G. R. de Queiroz, K. R. Ferreira, L. Vinhas, G. Camara, R. W. da Costa, R. C. M.
 
 ## Reporting Bugs
 
-Any problem should be reported to luizffga@dpi.inpe.br.
+Any problem should be reported to esensing-developers@dpi.inpe.br.
