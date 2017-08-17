@@ -82,7 +82,7 @@ plot(ts[[1]]$attributes[,1], main=sprintf("Pixel Center Coordinates Time-Series 
 ```
 
 <p align="center">
-<img src="images/plot-ts-timeseries.png" alt="Figure 1 - Vegetation index (ts time series)."  />
+<img src="inst/extdata/plot-ts-timeseries.png" alt="Figure 1 - Vegetation index (ts time series)."  />
 <p class="caption" align="center">
 Figure 1 - Vegetation index (ts time series).
 </p>
