@@ -17,7 +17,6 @@
 #' @import methods
 #' @import RCurl
 #' @import roxygen2
-#' @import testthat
 #' @import spacetime
 #' @import sp
 #' @import lubridate
@@ -99,7 +98,7 @@ setMethod(
 #' ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
 WTSS <- function(serverUrl) {
   
-  new (Class="WTSS",serverUrl = serverUrl)
+  methods::new (Class="WTSS", serverUrl = serverUrl)
   
 }
 
@@ -463,17 +462,17 @@ setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,la
   timeline <- unlist(strsplit(items$result$timeline, split=" "))
   
   # check date format
-  format <- guess_formats(timeline[1], c("%Y-%m-%d", "%Y-%m"))
+  format <- lubridate::guess_formats(timeline[1], c("%Y-%m-%d", "%Y-%m"))
   
   # if monthly date
   if(any(format == "%Y-%m"))
-      timeline = as.Date(as.yearmon(timeline))
+      timeline = as.Date(zoo::as.yearmon(timeline))
   else # if weekly or daily date
       if(any(format == "%Y-%m-%d"))
         timeline = as.Date(timeline, format)
   
   return(list(center_coordinate = data.frame(longitude=items$result$coordinates$longitude, latitude=items$result$coordinates$latitude), 
-              attributes = zoo(attributes.processed, timeline)))
+              attributes = zoo::zoo(attributes.processed, timeline)))
   
 }
 
@@ -511,11 +510,11 @@ setMethod("as.STFDF","list", function(timeseries) {
 .as.STFDF <- function(timeseries) 
 {
   
-  if (length(index(timeseries[[1]]$attributes)) <= 1)
+  if (length(zoo::index(timeseries[[1]]$attributes)) <= 1)
     cat("It is not possible to coerce from data into STFDF.")
   else {
      # STFDF return
-     return(STFDF(SpatialPoints(timeseries[[1]]$center_coordinate), index(timeseries[[1]]$attributes), data.frame(coredata(timeseries[[1]]$attributes))))
+     return(spacetime::STFDF(sp::SpatialPoints(timeseries[[1]]$center_coordinate), zoo::index(timeseries[[1]]$attributes), data.frame(zoo::coredata(timeseries[[1]]$attributes))))
   }
   
   return (NULL)
@@ -525,7 +524,7 @@ setMethod("as.STFDF","list", function(timeseries) {
 .sendRequest <- function(request) {
   
   # check if URL exists and perform the request
-  tryCatch(response <- getURL(request), error = function(e) {
+  tryCatch(response <- RCurl::getURL(request), error = function(e) {
     e$message <- paste("HTTP request failed. The URL server may be incorrect or the service may be temporarily unavailable."); 
     stop(e);
   })
@@ -538,7 +537,7 @@ setMethod("as.STFDF","list", function(timeseries) {
   
   # validate json
   if (validate(response)) {
-    json_response <- fromJSON(response)
+    json_response <- jsonlite::fromJSON(response)
     if("exception" %in% names(json_response))
       stop(json_response)
     return(json_response)
