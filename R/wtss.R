@@ -491,7 +491,7 @@ setMethod("timeSeries","WTSS", function(object,coverages,attributes,longitude,la
 #' longitude = -47
 #' latitude = -21.7
 #' start_date = "2013-01-01"
-#' end_date =  ""2016-12-12"
+#' end_date =  "2016-12-12"
 #' ts = timeSeries(ts.server, 
 #'                 names(cv), 
 #'                 attributes, 

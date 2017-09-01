@@ -3,7 +3,7 @@
 \usepackage[utf8]{inputenc}
 
 %\VignetteIndexEntry{How to}
-%\VignettePackage{wtss.R}
+%\VignettePackage{wtss}
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}

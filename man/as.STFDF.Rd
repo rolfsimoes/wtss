@@ -16,3 +16,21 @@ as.STFDF(timeseries)
 \description{
 This function coerce data from the time series into STFDF data
 }
+\examples{
+ts.server = WTSS("http://www.dpi.inpe.br/tws/wtss")
+coverages  = listCoverages(ts.server)
+cv = describeCoverage(ts.server, coverages[5])
+attributes = cv[[1]]$attributes$name[1] 
+longitude = -47
+latitude = -21.7
+start_date = "2013-01-01"
+end_date =  "2016-12-12"
+ts = timeSeries(ts.server, 
+                names(cv), 
+                attributes, 
+                longitude,
+                latitude,
+                start_date,
+                end_date)
+stfdf <- as.STFDF(ts)
+}
